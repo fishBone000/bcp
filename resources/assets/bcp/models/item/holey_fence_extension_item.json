@@ -1,0 +1,99 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+    "parent": "minecraft:block/block",
+    "display": {
+	"thirdperson_lefthand": {
+            "rotation": [ 75, 315, 0 ],
+            "translation": [ 0, 2.5, 0],
+            "scale": [ 0.5625, 0.5625, 0.5625 ]
+        },
+	"thirdperson_righthand": {
+            "rotation": [ 75, 135, 0 ],
+            "translation": [ 0, 2.5, 0],
+            "scale": [ 0.5625, 0.5625, 0.5625 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 135, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.60, 0.60, 0.60 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.60, 0.60, 0.60 ]
+	},
+        "gui": {
+            "rotation": [ 30, 225, 0 ],
+            "translation": [ 0, 0, 0],
+            "scale":[ 0.625, 0.625, 0.625 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 0, 0],
+            "scale":[ 0.5, 0.5, 0.5 ]
+        }
+    },
+    "textures": {
+        "fence_face_cross": "bcp:block/fence_face_cross",
+        "quartz_block_bottom": "minecraft:block/quartz_block_bottom"
+    },
+    "elements": [
+        {
+            "name": "Bar 0",
+            "from": [ 3.75, 15, 7.5 ], 
+            "to": [ 12.25, 16, 8.5 ], 
+            "faces": {
+                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 1, 1 ] },
+                "south": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 1, 1 ] },
+                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] }
+            }
+        },
+        {
+            "name": "Bar 1",
+            "from": [ 3.75, 11.75, 7.5 ], 
+            "to": [ 12.25, 12.75, 8.5 ], 
+            "faces": {
+                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 1, 1 ] },
+                "south": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 1, 1 ] },
+                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] }
+            }
+        },
+        {
+            "name": "Bar 2",
+            "from": [ 3.75, 2.5, 7.5 ], 
+            "to": [ 12.25, 3.5, 8.5 ], 
+            "faces": {
+                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 1, 1 ] },
+                "south": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 1, 1 ] },
+                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] },
+                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 8.5, 1 ] }
+            }
+        },
+        {
+            "name": "Face",
+            "from": [ 8, 3.5, 8 ], 
+            "to": [ 12.25, 11.75, 8 ], 
+            "faces": {
+                "north": { "texture": "#fence_face_cross", "uv": [ 4, 0, 8, 8.25 ] },
+                "south": { "texture": "#fence_face_cross", "uv": [ 8, 0, 4, 8.25 ] }
+            }
+        },
+        {
+            "name": "Face",
+            "from": [ 3.75, 3.5, 8 ], 
+            "to": [ 8, 11.75, 8 ], 
+            "faces": {
+                "north": { "texture": "#fence_face_cross", "uv": [ 8, 0, 4, 8.25 ] },
+                "south": { "texture": "#fence_face_cross", "uv": [ 4, 0, 8, 8.25 ] }
+            }
+        }
+    ]
+}

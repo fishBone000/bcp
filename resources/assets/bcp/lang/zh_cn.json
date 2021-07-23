@@ -1,0 +1,6 @@
+{
+	"block.bcp.test_brick_block": "测试用砖",
+	"item.bcp.test_brick_item": "测试用砖", 
+	"block.bcp.holey_fence_node": "洞洞栏杆节点",
+	"block.bcp.holey_fence_extension": "洞洞栏杆延伸"
+}

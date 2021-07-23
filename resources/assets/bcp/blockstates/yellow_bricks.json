@@ -1,0 +1,10 @@
+{
+    "variants": {
+	"varient_05=0": { "model": "bcp:block/yellow_bricks_00"},
+	"varient_05=1": { "model": "bcp:block/yellow_bricks_01"},
+	"varient_05=2": { "model": "bcp:block/yellow_bricks_02"},
+	"varient_05=3": { "model": "bcp:block/yellow_bricks_10"},
+	"varient_05=4": { "model": "bcp:block/yellow_bricks_01"},
+	"varient_05=5": { "model": "bcp:block/yellow_bricks_02"}
+    }
+}

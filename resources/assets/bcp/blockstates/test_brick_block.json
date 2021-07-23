@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bcp:block/test_brick_block"
+    }
+  }
+}
