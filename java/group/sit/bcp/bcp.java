@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 import group.sit.bcp.block.HoleyFenceNode;
 import group.sit.bcp.block.HoleyFenceExtension;
 import group.sit.bcp.block.SixVarientsBlock;
-import group.sit.bcp.tileentity.MainBlockPosTE;
+// import group.sit.bcp.tileentity.MainBlockPosTE;
 
 import java.util.stream.Collectors;
 
@@ -45,7 +45,7 @@ public class bcp
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, null).build(null);
+    // public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, null).build(null);
     
     //  ===============================   BLOCK / ITEM INSTANCE START   ==============================
     private static final Block testBrick = new Block(AbstractBlock.Properties
@@ -139,7 +139,7 @@ public class bcp
     public static class RegistryEvents {
     	@SubscribeEvent
     	public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> teTypeRegistryEvent) {
-    		teTypeRegistryEvent.getRegistry().register(mainBlockPosTEType.setRegistryName(new ResourceLocation("bcp:main_block_pos_te_type")));
+    		// teTypeRegistryEvent.getRegistry().register(mainBlockPosTEType.setRegistryName(new ResourceLocation("bcp:main_block_pos_te_type")));
     	}
 
         @SubscribeEvent
