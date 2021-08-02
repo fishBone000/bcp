@@ -1,0 +1,23 @@
+"multipart": {
+	{
+		"when": {"part": "sub"},
+		"apply": {"bcp:block/empty"}
+	},
+	{
+		"when": {"part": "main", "facing": "north"},
+		"apply": {"bcp:block/testMultiBlock"},
+		"y": 0
+	},
+	{
+		"when": {"part": "main", "facing": "west"},
+		"apply": {"bcp:block/testMultiBlock", "y": 270}
+	},
+	{
+		"when": {"part": "main", "facing": "south"},
+		"apply": {"bcp:block/testMultiBlock", "y": 180}
+	},
+	{
+		"when": {"part": "main", "facing": "east"},
+		"apply": {"bcp:block/testMultiBlock", "y": 90}
+	}
+}

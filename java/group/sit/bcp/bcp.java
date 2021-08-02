@@ -28,9 +28,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import group.sit.bcp.block.HoleyFenceNode;
-import group.sit.bcp.block.HoleyFenceExtension;
-import group.sit.bcp.block.SixVarientsBlock;
+import group.sit.bcp.block.*;
+import group.sit.bcp.item.*;
 import group.sit.bcp.tileentity.MainBlockPosTE;
 
 import java.util.stream.Collectors;
@@ -45,9 +44,10 @@ public class bcp
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, null).build(null);
-    
     //  ===============================   BLOCK / ITEM INSTANCE START   ==============================
+    private static final StackTraceBlock stackTraceBlock = new StackTraceBlock();
+    private static final BlockItem stackTraceBlockItem = new BlockItem(stackTraceBlock, new Item.Properties());
+
     private static final Block testBrick = new Block(AbstractBlock.Properties
     		.create(Material.ROCK, MaterialColor.RED)
     		.hardnessAndResistance(2.0F, 6.0F)
@@ -55,12 +55,13 @@ public class bcp
     		);
     private static final BlockItem testBrickItem = new BlockItem(testBrick, new Item.Properties());
     
-    private static final SixVarientsBlock yellowBricks = new SixVarientsBlock(AbstractBlock.Properties
+    private static final SometimesDirtyBrick yellowBricks = new SometimesDirtyBrick(AbstractBlock.Properties
     		.create(Material.ROCK)
     		.hardnessAndResistance(2.0F, 6.0F)
     		.setRequiresTool()
     		);
     private static final BlockItem yellowBricksItem = new BlockItem(yellowBricks, new Item.Properties());
+    private static final DirtyBrickItem yellowBricksDirtyItem = new DirtyBrickItem(yellowBricks, new Item.Properties());
 
     private static final Block yellowWall = new Block(AbstractBlock.Properties
     		.create(Material.ROCK)
@@ -82,7 +83,15 @@ public class bcp
     		.setRequiresTool()
     		);
     private static final BlockItem HoleyFenceExtensionItem = new BlockItem(HoleyFenceExtension, new Item.Properties());
+
+    private static final MultiBlock testMultiBlock = new MultiBlock(2, 2, 3, AbstractBlock.Properties
+    		.create(Material.IRON)
+    		.hardnessAndResistance(2.0F, 6.0F)
+    		.setRequiresTool());
+    private static final BlockItem testMultiBlockItem = new BlockItem(testMultiBlock, new Item.Properties());
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
+    public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, testMultiBlock).build(null);
+    
 
     public bcp() {
         // Register the setup method for modloading
@@ -151,7 +160,9 @@ public class bcp
             		HoleyFenceNode.setRegistryName(new ResourceLocation("bcp:holey_fence_node")),
             		HoleyFenceExtension.setRegistryName(new ResourceLocation("bcp:holey_fence_extension")),
             		yellowBricks.setRegistryName(new ResourceLocation("bcp:yellow_bricks")),
-            		yellowWall.setRegistryName(new ResourceLocation("bcp:yellow_wall"))
+            		yellowWall.setRegistryName(new ResourceLocation("bcp:yellow_wall")),
+            		testMultiBlock.setRegistryName(new ResourceLocation("bcp:test_multi_block")),
+            		stackTraceBlock.setRegistryName(new ResourceLocation("bcp:stack_trace_block"))
             		);
         }
         @SubscribeEvent
@@ -162,7 +173,10 @@ public class bcp
         			HoleyFenceNodeItem.setRegistryName(new ResourceLocation("bcp:holey_fence_node_item")),
         			HoleyFenceExtensionItem.setRegistryName(new ResourceLocation("bcp:holey_fence_extension_item")),
         			yellowBricksItem.setRegistryName(new ResourceLocation("bcp:yellow_bricks_item")),
-        			yellowWallItem.setRegistryName(new ResourceLocation("bcp:yellow_wall_item"))
+        			yellowBricksDirtyItem.setRegistryName(new ResourceLocation("bcp:yellow_bricks_dirty_item")),
+        			yellowWallItem.setRegistryName(new ResourceLocation("bcp:yellow_wall_item")),
+        			testMultiBlockItem.setRegistryName(new ResourceLocation("bcp:test_multi_block_item")),
+        			stackTraceBlockItem.setRegistryName(new ResourceLocation("bcp:stack_trace_block_item"))
         			);
         }
     }

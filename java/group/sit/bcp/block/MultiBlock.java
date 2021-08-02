@@ -5,6 +5,7 @@ import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -22,7 +23,34 @@ import javax.annotation.Nullable;
 import group.sit.bcp.properties.MultiBlockPart;
 import group.sit.bcp.tileentity.MainBlockPosTE;
 
-public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVED BY PISTON OR ANYTHING ELSE:w
+
+/*
+ * ====================    MAP    ======================
+ *                      
+ *                         NORTH
+ *                           ^
+ *                           |
+ *                                 depthEnd
+ *
+ *
+ *
+ *                 widthStart                 widthEnd
+ *                            ------------------------> X
+ *                            |
+ *                            |
+ *                            |    depthStart
+ *                            |
+ *                            |
+ *                            |
+ *                            |
+ *                            |
+ *                            |
+ *                            V
+ *                            Z
+ *
+ */
+
+public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVED BY PISTON OR ANYTHING ELSE
 
 	public static final EnumProperty<MultiBlockPart> PART = EnumProperty.create("part", MultiBlockPart.class);
 
@@ -45,6 +73,10 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 		this.widthEnd = widthEnd;
 		this.heightEnd  = heightEnd;
 		this.depthEnd  = depthEnd;
+	}
+
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		return this.getStateContainer().getBaseState().with(PART, MultiBlockPart.MAIN).with(HORIZONTAL_FACING, context.getPlacementHorizontalFacing());
 	}
 
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
@@ -78,7 +110,7 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 							MainBlockPosTE mbpte = (MainBlockPosTE)te;
 							mbpte.setMainBlockPos(pos);
 						}else
-							LOGGER.warn("TileEntity at position " + iPos + " is expected to be instance of <ainBlockPosTE");
+							LOGGER.warn("TileEntity at position " + iPos + " is expected to be instance of MainBlockPosTE");
 
 					}
 				}
@@ -87,7 +119,16 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 	}
 
 	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-		// TODO
+		HorizontalRange range = new HorizontalRange(state.get(HORIZONTAL_FACING));
+		for(int iSouth = range.southStart; iSouth <= range.southEnd; iSouth++) {
+			for(int iEast = range.eastStart; iEast <= range.eastEnd; iEast++) {
+				for(int iHeight = heightStart; iHeight <= heightEnd; iHeight++) {
+					if(worldIn.getBlockState(pos.south(iSouth).east(iEast).up(iHeight)).isIn(worldIn.getBlockState(pos).getBlock())) {
+						worldIn.setBlockState(pos.south(iSouth).east(iEast).up(iHeight), Blocks.AIR.getDefaultState(), 3);
+					}
+				}
+			}
+		}
 	}
 	private void breakAllBlocks(IWorld worldIn, BlockPos mainBlockPos, Direction facing) {
 		HorizontalRange range = new HorizontalRange(facing);
@@ -102,7 +143,7 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 		}
 	}
 
-	// TODO write onExplosionDestroy
+	// TODO onExplosionDestroy
 
 	public boolean hasTileEntity(BlockState state) {
 		return true;
@@ -114,7 +155,7 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		super.fillStateContainer(builder);
-		builder.add(PART);
+		builder.add(PART, HORIZONTAL_FACING);
 	}
 
 	private class HorizontalRange{
@@ -125,26 +166,26 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 				case NORTH:
 					southStart = -depthEnd;
 					southEnd = -depthStart;
-					eastStart = -widthStart;
-					eastEnd = -widthEnd;
-					break;
-				case SOUTH:
-					southStart = depthEnd;
-					southEnd = depthStart;
 					eastStart = widthStart;
 					eastEnd = widthEnd;
 					break;
+				case SOUTH:
+					southStart = depthStart;
+					southEnd = depthEnd;
+					eastStart = -widthEnd;
+					eastEnd = -widthStart;
+					break;
 				case WEST:
-					southStart = widthStart;
-					southEnd = widthEnd;
+					southStart = -widthEnd;
+					southEnd = -widthStart;
 					eastStart = -depthEnd;
 					eastEnd = -depthStart;
 					break;
 				case EAST:
-					southStart = -widthStart;
-					southEnd = -widthEnd;
-					eastStart = depthEnd;
-					eastEnd = depthStart;
+					southStart = widthStart;
+					southEnd = widthEnd;
+					eastStart = depthStart;
+					eastEnd = depthEnd;
 					break;
 			}
 		}
