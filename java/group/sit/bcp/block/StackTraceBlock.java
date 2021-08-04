@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 public class StackTraceBlock extends Block {
@@ -46,5 +47,11 @@ public class StackTraceBlock extends Block {
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		Thread.dumpStack();
 		return super.isValidPosition(state, worldIn, pos);
+	}
+
+	@Override
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		Thread.dumpStack();
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 }

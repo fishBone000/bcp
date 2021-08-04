@@ -20,6 +20,9 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import group.sit.bcp.properties.MultiBlockPart;
 import group.sit.bcp.tileentity.MainBlockPosTE;
 
@@ -52,6 +55,8 @@ import group.sit.bcp.tileentity.MainBlockPosTE;
 
 public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVED BY PISTON OR ANYTHING ELSE
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	public static final EnumProperty<MultiBlockPart> PART = EnumProperty.create("part", MultiBlockPart.class);
 
 	private final int widthStart, heightStart, depthStart, widthEnd, heightEnd, depthEnd;
@@ -73,6 +78,29 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 		this.widthEnd = widthEnd;
 		this.heightEnd  = heightEnd;
 		this.depthEnd  = depthEnd;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(!(state.getBlock() instanceof MultiBlock)) {
+			LOGGER.warn("Expected block at pos " + pos.toString() + " type of MultiBlock sub block, but it is " + state.toString() + ", this shoudln't happen!");
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
+			return;
+		}
+		if(te != null) {
+			if(te instanceof MainBlockPosTE) {
+				BlockPos mainBlockPos = ((MainBlockPosTE)te).getMainBlockPos();
+				Block block = worldIn.getBlockState(mainBlockPos).getBlock();
+				if(block instanceof MultiBlock) {
+					((MultiBlock)block).breakAllBlocks(worldIn, state, mainBlockPos, worldIn.getBlockState(mainBlockPos).get(HORIZONTAL_FACING));
+					return;
+				}else 
+					LOGGER.warn("Expected block at pos " + mainBlockPos.toString() + " type of MultiBlock main block, but it is " + block.toString() + ", this shouldn't happen!");
+			}else 
+				LOGGER.warn("Expected TileEntity at pos " + pos.toString() + " type of MainBlockPosTE, but it is " + te.toString() + ", this shouldn't happen!");
+		}
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
@@ -130,13 +158,15 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 			}
 		}
 	}
-	private void breakAllBlocks(IWorld worldIn, BlockPos mainBlockPos, Direction facing) {
+	private void breakAllBlocks(World worldIn, BlockState state, BlockPos mainBlockPos, Direction facing) {
 		HorizontalRange range = new HorizontalRange(facing);
 		for(int iSouth = range.southStart; iSouth <= range.southEnd; iSouth++) {
 			for(int iEast = range.eastStart; iEast <= range.eastEnd; iEast++) {
 				for(int iHeight = heightStart; iHeight <= heightEnd; iHeight++) {
-					if(iSouth != 0 || iEast != 0 || iHeight != 0) {
-						worldIn.setBlockState(mainBlockPos.south(iSouth).east(iEast).up(iHeight), Blocks.AIR.getDefaultState(), 3);
+					BlockPos iPos = mainBlockPos.south(iSouth).east(iEast).up(iHeight);
+					if(worldIn.getBlockState(iPos).isIn(worldIn.getBlockState(mainBlockPos).getBlock())) {
+						worldIn.removeTileEntity(iPos);
+						worldIn.setBlockState(iPos, Blocks.AIR.getDefaultState(), 3);
 					}
 				}
 			}
