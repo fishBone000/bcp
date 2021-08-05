@@ -88,19 +88,21 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 			super.onReplaced(state, worldIn, pos, newState, isMoving);
 			return;
 		}
+		Block block = state.getBlock();
 		if(te != null) {
 			if(te instanceof MainBlockPosTE) {
 				BlockPos mainBlockPos = ((MainBlockPosTE)te).getMainBlockPos();
-				Block block = worldIn.getBlockState(mainBlockPos).getBlock();
 				if(block instanceof MultiBlock) {
-					((MultiBlock)block).breakAllBlocks(worldIn, state, mainBlockPos, worldIn.getBlockState(mainBlockPos).get(HORIZONTAL_FACING));
+					((MultiBlock)block).breakAllBlocks(worldIn, block, mainBlockPos, worldIn.getBlockState(mainBlockPos).get(HORIZONTAL_FACING));
 					return;
 				}else 
 					LOGGER.warn("Expected block at pos " + mainBlockPos.toString() + " type of MultiBlock main block, but it is " + block.toString() + ", this shouldn't happen!");
 			}else 
 				LOGGER.warn("Expected TileEntity at pos " + pos.toString() + " type of MainBlockPosTE, but it is " + te.toString() + ", this shouldn't happen!");
-		}
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		}else if(state.get(PART) == MultiBlockPart.MAIN) {
+			this.breakAllBlocks(worldIn, block, pos, state.get(HORIZONTAL_FACING));
+		}else // This sub block has been marked as being removed by breakAllBlocks. Remove it normally to prevent calling breakAllBlocks again.
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
@@ -112,7 +114,7 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 		for(int iSouth = range.southStart; iSouth <= range.southEnd; iSouth++) {
 			for(int iEast = range.eastStart; iEast <= range.eastEnd; iEast++) {
 				for(int iHeight = heightStart; iHeight <= heightEnd; iHeight++) {
-					if(!worldIn.getBlockState(pos.south(iSouth).east(iEast).up(iHeight)).isIn(Blocks.AIR)) {
+					if(!worldIn.getBlockState(pos.south(iSouth).east(iEast).up(iHeight)).isIn(Blocks.AIR) || !super.isValidPosition(state, worldIn, pos)) {
 						return false;
 					}
 				}
@@ -158,14 +160,14 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 			}
 		}
 	}
-	private void breakAllBlocks(World worldIn, BlockState state, BlockPos mainBlockPos, Direction facing) {
+	private void breakAllBlocks(World worldIn, Block block, BlockPos mainBlockPos, Direction facing) {
 		HorizontalRange range = new HorizontalRange(facing);
 		for(int iSouth = range.southStart; iSouth <= range.southEnd; iSouth++) {
 			for(int iEast = range.eastStart; iEast <= range.eastEnd; iEast++) {
 				for(int iHeight = heightStart; iHeight <= heightEnd; iHeight++) {
 					BlockPos iPos = mainBlockPos.south(iSouth).east(iEast).up(iHeight);
-					if(worldIn.getBlockState(iPos).isIn(worldIn.getBlockState(mainBlockPos).getBlock())) {
-						worldIn.removeTileEntity(iPos);
+					if(worldIn.getBlockState(iPos).isIn(block)) {
+						worldIn.removeTileEntity(iPos); // Remove TE to mark it as being removed by this method.
 						worldIn.setBlockState(iPos, Blocks.AIR.getDefaultState(), 3);
 					}
 				}
@@ -176,7 +178,7 @@ public class MultiBlock extends HorizontalBlock {   //   NOTE  SHOULDN'T BE MOVE
 	// TODO onExplosionDestroy
 
 	public boolean hasTileEntity(BlockState state) {
-		return true;
+		return state.get(PART) != MultiBlockPart.MAIN;
 	}
 
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
