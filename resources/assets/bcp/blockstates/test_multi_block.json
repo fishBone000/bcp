@@ -1,0 +1,24 @@
+{
+	"multipart": [
+		{
+			"when": {"part": "sub"},
+			"apply": {"model": "bcp:block/empty"}
+		},
+		{
+			"when": {"part": "main", "facing": "north"},
+			"apply": {"model": "bcp:block/test_multi_block", "y": 0}
+		},
+		{
+			"when": {"part": "main", "facing": "west"},
+			"apply": {"model": "bcp:block/test_multi_block", "y": 270}
+		},
+		{
+			"when": {"part": "main", "facing": "south"},
+			"apply": {"model": "bcp:block/test_multi_block", "y": 180}
+		},
+		{
+			"when": {"part": "main", "facing": "east"},
+			"apply": {"model": "bcp:block/test_multi_block", "y": 90}
+		}
+	]
+}
