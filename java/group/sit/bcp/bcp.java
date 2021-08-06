@@ -12,7 +12,11 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,55 +43,60 @@ import java.util.stream.Collectors;
 public class bcp
 {
 	public static final String MODID = "bcp";
-	public static final String VERSION = "0.1.5 alpha";
+	public static final String VERSION = "0.2 alpha";
 	
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final AbstractBlock.Properties ROCK = AbstractBlock.Properties
+    		.create(Material.ROCK)
+    		.hardnessAndResistance(2.0F, 6.0F)
+    		.setRequiresTool();
+
+    private static final AbstractBlock.Properties IRON = AbstractBlock.Properties
+    		.create(Material.IRON)
+    		.hardnessAndResistance(2.0F, 6.0F)
+    		.setRequiresTool();
+
+    private static final ItemGroup itemGroup = (new ItemGroup("BCP"){
+    	@OnlyIn(Dist.CLIENT)
+    	public ItemStack createIcon() {
+    		return new ItemStack(creamNoiseBlock);
+    	}
+    }).setTabPath("BCP");
+
+    private static final Item.Properties PROP = new Item.Properties().group(itemGroup);
+
     //  ===============================   BLOCK / ITEM INSTANCE START   ==============================
+    private static final Block creamNoiseBlock = new Block(ROCK);
+    private static final BlockItem creamNoiseBlockItem = new BlockItem(creamNoiseBlock, PROP);
+
+    private static final Block greyNoiseBlock = new Block(ROCK);
+    private static final BlockItem greyNoiseBlockItem = new BlockItem(greyNoiseBlock, PROP);
+
     private static final StackTraceBlock stackTraceBlock = new StackTraceBlock();
     private static final BlockItem stackTraceBlockItem = new BlockItem(stackTraceBlock, new Item.Properties());
 
-    private static final Block testBrick = new Block(AbstractBlock.Properties
-    		.create(Material.ROCK, MaterialColor.RED)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool()
-    		);
+    private static final Block testBrick = new Block(ROCK);
     private static final BlockItem testBrickItem = new BlockItem(testBrick, new Item.Properties());
     
-    private static final SometimesDirtyBrick yellowBricks = new SometimesDirtyBrick(AbstractBlock.Properties
-    		.create(Material.ROCK)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool()
-    		);
-    private static final BlockItem yellowBricksItem = new BlockItem(yellowBricks, new Item.Properties());
-    private static final DirtyBrickItem yellowBricksDirtyItem = new DirtyBrickItem(yellowBricks, new Item.Properties());
+    private static final Block creamBricks = new Block(ROCK);
+    private static final BlockItem creamBricksItem = new BlockItem(creamBricks, PROP);
+    //private static final DirtyBrickItem creamBricksDirtyItem = new DirtyBrickItem(creamBricks, PROP);
 
-    private static final Block yellowWall = new Block(AbstractBlock.Properties
-    		.create(Material.ROCK)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool()
-    		);
-    private static final BlockItem yellowWallItem = new BlockItem(yellowWall, new Item.Properties());
-    
-    private static HoleyFenceNode HoleyFenceNode = new HoleyFenceNode(AbstractBlock.Properties
-    		.create(Material.IRON)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool()
-    		);
-    private static BlockItem HoleyFenceNodeItem = new BlockItem(HoleyFenceNode, new Item.Properties());
-    
-    private static HoleyFenceExtension HoleyFenceExtension = new HoleyFenceExtension(AbstractBlock.Properties
-    		.create(Material.IRON)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool()
-    		);
-    private static final BlockItem HoleyFenceExtensionItem = new BlockItem(HoleyFenceExtension, new Item.Properties());
+    private static final Block greyBricks = new Block(ROCK);
+    private static final BlockItem greyBricksItem = new BlockItem(greyBricks, PROP);
 
-    private static final MultiBlock testMultiBlock = new MultiBlock(2, 2, 3, AbstractBlock.Properties
-    		.create(Material.IRON)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool());
+    private static final Block creamWall = new Block(ROCK);
+    private static final BlockItem creamWallItem = new BlockItem(creamWall, PROP);
+    
+    private static HoleyFenceNode HoleyFenceNode = new HoleyFenceNode(IRON);
+    private static BlockItem HoleyFenceNodeItem = new BlockItem(HoleyFenceNode, PROP);
+    
+    private static HoleyFenceExtension HoleyFenceExtension = new HoleyFenceExtension(IRON);
+    private static final BlockItem HoleyFenceExtensionItem = new BlockItem(HoleyFenceExtension, PROP);
+
+    private static final MultiBlock testMultiBlock = new MultiBlock(2, 2, 3, IRON);
     private static final BlockItem testMultiBlockItem = new BlockItem(testMultiBlock, new Item.Properties());
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
     public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, testMultiBlock).build(null);
@@ -159,10 +168,13 @@ public class bcp
             		testBrick.setRegistryName(new ResourceLocation("bcp:test_brick_block")),
             		HoleyFenceNode.setRegistryName(new ResourceLocation("bcp:holey_fence_node")),
             		HoleyFenceExtension.setRegistryName(new ResourceLocation("bcp:holey_fence_extension")),
-            		yellowBricks.setRegistryName(new ResourceLocation("bcp:yellow_bricks")),
-            		yellowWall.setRegistryName(new ResourceLocation("bcp:yellow_wall")),
+            		creamBricks.setRegistryName(new ResourceLocation("bcp:cream_bricks")),
+            		greyBricks.setRegistryName(new ResourceLocation("bcp:grey_bricks")),
+            		creamWall.setRegistryName(new ResourceLocation("bcp:cream_wall")),
             		testMultiBlock.setRegistryName(new ResourceLocation("bcp:test_multi_block")),
-            		stackTraceBlock.setRegistryName(new ResourceLocation("bcp:stack_trace_block"))
+            		stackTraceBlock.setRegistryName(new ResourceLocation("bcp:stack_trace_block")),
+            		creamNoiseBlock.setRegistryName(new ResourceLocation("bcp:cream_noise_block")),
+            		greyNoiseBlock.setRegistryName(new ResourceLocation("bcp:grey_noise_block"))
             		);
         }
         @SubscribeEvent
@@ -172,11 +184,14 @@ public class bcp
         			testBrickItem.setRegistryName(new ResourceLocation("bcp:test_brick_item")),
         			HoleyFenceNodeItem.setRegistryName(new ResourceLocation("bcp:holey_fence_node_item")),
         			HoleyFenceExtensionItem.setRegistryName(new ResourceLocation("bcp:holey_fence_extension_item")),
-        			yellowBricksItem.setRegistryName(new ResourceLocation("bcp:yellow_bricks_item")),
-        			yellowBricksDirtyItem.setRegistryName(new ResourceLocation("bcp:yellow_bricks_dirty_item")),
-        			yellowWallItem.setRegistryName(new ResourceLocation("bcp:yellow_wall_item")),
+        			creamBricksItem.setRegistryName(new ResourceLocation("bcp:cream_bricks_item")),
+        			greyBricksItem.setRegistryName(new ResourceLocation("bcp:grey_bricks_item")),
+        			//creamBricksDirtyItem.setRegistryName(new ResourceLocation("bcp:cream_bricks_dirty_item")),
+        			creamWallItem.setRegistryName(new ResourceLocation("bcp:cream_wall_item")),
         			testMultiBlockItem.setRegistryName(new ResourceLocation("bcp:test_multi_block_item")),
-        			stackTraceBlockItem.setRegistryName(new ResourceLocation("bcp:stack_trace_block_item"))
+        			stackTraceBlockItem.setRegistryName(new ResourceLocation("bcp:stack_trace_block_item")),
+        			creamNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:cream_noise_block_item")),
+        			greyNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:grey_noise_block_item"))
         			);
         }
     }

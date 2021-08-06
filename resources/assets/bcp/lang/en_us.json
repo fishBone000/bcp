@@ -2,5 +2,11 @@
 	"block.bcp.test_brick_block": "Test Bricks",
 	"item.bcp.test_brick_item": "Test Bricks",
 	"block.bcp.holey_fence_node": "Holey Fence Node",
-	"block.bcp.holey_fence_extension": "Holey Fence Extension"
+	"block.bcp.holey_fence_extension": "Holey Fence Extension",
+	"block.bcp.cream_bricks": "Cream Bricks",
+	"block.bcp.grey_bricks": "Grey Bricks",
+	"block.bcp.cream_wall": "Cream Wall",
+	"block.bcp.cream_noise_block": "Cream Noise Block",
+	"block.bcp.grey_noise_block": "Grey Noise Block",
+	"itemGroup.BCP": "BCP"
 }

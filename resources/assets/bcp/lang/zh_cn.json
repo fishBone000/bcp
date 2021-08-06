@@ -2,5 +2,11 @@
 	"block.bcp.test_brick_block": "测试用砖",
 	"item.bcp.test_brick_item": "测试用砖", 
 	"block.bcp.holey_fence_node": "洞洞栏杆节点",
-	"block.bcp.holey_fence_extension": "洞洞栏杆延伸"
+	"block.bcp.holey_fence_extension": "洞洞栏杆延伸",
+	"block.bcp.cream_bricks": "米色砖",
+	"block.bcp.grey_bricks": "灰色砖",
+	"block.bcp.cream_wall": "米色墙",
+	"block.bcp.cream_noise_block": "米色噪点方块",
+	"block.bcp.grey_noise_block": "灰色噪点方块",
+	"itemGroup.BCP": "BCP"
 }
