@@ -4,6 +4,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FenceBlock;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.AbstractBlock;
@@ -71,8 +73,20 @@ public class bcp
     private static final Block creamNoiseBlock = new Block(ROCK);
     private static final BlockItem creamNoiseBlockItem = new BlockItem(creamNoiseBlock, PROP);
 
+    private static final StairsBlock creamNoiseStairs = new StairsBlock(() -> creamNoiseBlock.getDefaultState(), ROCK);
+    private static final BlockItem creamNoiseStairsItem = new BlockItem(creamNoiseStairs, PROP);
+
+    private static final SlabBlock creamNoiseSlab = new SlabBlock(ROCK);
+    private static final BlockItem creamNoiseSlabItem = new BlockItem(creamNoiseSlab, PROP);
+
     private static final Block greyNoiseBlock = new Block(ROCK);
     private static final BlockItem greyNoiseBlockItem = new BlockItem(greyNoiseBlock, PROP);
+
+    private static final SlabBlock greyNoiseSlab = new SlabBlock(ROCK);
+    private static final BlockItem greyNoiseSlabItem = new BlockItem(greyNoiseSlab, PROP);
+
+    private static final StairsBlock greyNoiseStairs = new StairsBlock(() -> greyNoiseBlock.getDefaultState(), ROCK);
+    private static final BlockItem greyNoiseStairsItem = new BlockItem(greyNoiseStairs, PROP);
 
     private static final StackTraceBlock stackTraceBlock = new StackTraceBlock();
     private static final BlockItem stackTraceBlockItem = new BlockItem(stackTraceBlock, new Item.Properties());
@@ -174,7 +188,11 @@ public class bcp
             		testMultiBlock.setRegistryName(new ResourceLocation("bcp:test_multi_block")),
             		stackTraceBlock.setRegistryName(new ResourceLocation("bcp:stack_trace_block")),
             		creamNoiseBlock.setRegistryName(new ResourceLocation("bcp:cream_noise_block")),
-            		greyNoiseBlock.setRegistryName(new ResourceLocation("bcp:grey_noise_block"))
+            		creamNoiseSlab.setRegistryName(new ResourceLocation("bcp:cream_noise_slab")),
+            		creamNoiseStairs.setRegistryName(new ResourceLocation("bcp:cream_noise_stairs")),
+            		greyNoiseBlock.setRegistryName(new ResourceLocation("bcp:grey_noise_block")),
+            		greyNoiseSlab.setRegistryName(new ResourceLocation("bcp:grey_noise_slab")),
+            		greyNoiseStairs.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs"))
             		);
         }
         @SubscribeEvent
@@ -190,8 +208,12 @@ public class bcp
         			creamWallItem.setRegistryName(new ResourceLocation("bcp:cream_wall_item")),
         			testMultiBlockItem.setRegistryName(new ResourceLocation("bcp:test_multi_block_item")),
         			stackTraceBlockItem.setRegistryName(new ResourceLocation("bcp:stack_trace_block_item")),
-        			creamNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:cream_noise_block_item")),
-        			greyNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:grey_noise_block_item"))
+            		creamNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:cream_noise_block_item")),
+            		creamNoiseSlabItem.setRegistryName(new ResourceLocation("bcp:cream_noise_slab_item")),
+            		creamNoiseStairsItem.setRegistryName(new ResourceLocation("bcp:cream_noise_stairs_item")),
+            		greyNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:grey_noise_block_item")),
+            		greyNoiseSlabItem.setRegistryName(new ResourceLocation("bcp:grey_noise_slab_item")),
+            		greyNoiseStairsItem.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs_item"))
         			);
         }
     }

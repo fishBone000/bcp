@@ -7,6 +7,10 @@
 	"block.bcp.grey_bricks": "Grey Bricks",
 	"block.bcp.cream_wall": "Cream Wall",
 	"block.bcp.cream_noise_block": "Cream Noise Block",
+	"block.bcp.cream_noise_stairs": "Cream Noise Stairs",
+	"block.bcp.cream_noise_slab": "Cream Noise Slab",
 	"block.bcp.grey_noise_block": "Grey Noise Block",
+	"block.bcp.grey_noise_stairs": "Grey Noise Stairs",
+	"block.bcp.grey_noise_slab": "Grey Noise Slab",
 	"itemGroup.BCP": "BCP"
 }

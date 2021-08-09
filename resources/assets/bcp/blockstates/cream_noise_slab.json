@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "bcp:block/cream_noise_slab"
+    },
+    "type=double": {
+      "model": "bcp:block/cream_noise_block"
+    },
+    "type=top": {
+      "model": "bcp:block/cream_noise_slab_top"
+    }
+  }
+}

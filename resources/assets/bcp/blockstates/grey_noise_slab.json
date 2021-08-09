@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "bcp:block/grey_noise_slab"
+    },
+    "type=double": {
+      "model": "bcp:block/grey_noise_block"
+    },
+    "type=top": {
+      "model": "bcp:block/grey_noise_slab_top"
+    }
+  }
+}

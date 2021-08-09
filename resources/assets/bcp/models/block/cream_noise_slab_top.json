@@ -1,0 +1,9 @@
+{
+	"parent": "minecraft:block/slab_top",
+	"textures": {
+		"bottom": "#all",
+		"top": "#all",
+		"side": "#all",
+		"all": "bcp:block/cream_noise_block"
+	}
+}
