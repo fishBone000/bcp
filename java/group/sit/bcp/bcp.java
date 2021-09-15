@@ -70,6 +70,9 @@ public class bcp
     private static final Item.Properties PROP = new Item.Properties().group(itemGroup);
 
     //  ===============================   BLOCK / ITEM INSTANCE START   ==============================
+    private static final DoubleSizeDoor testDoubleSizeDoor = new DoubleSizeDoor(IRON);
+    private static final BlockItem testDoubleSizeDoorItem = new BlockItem(testDoubleSizeDoor, PROP);
+
     private static final Block creamNoiseBlock = new Block(ROCK);
     private static final BlockItem creamNoiseBlockItem = new BlockItem(creamNoiseBlock, PROP);
 
@@ -98,20 +101,35 @@ public class bcp
     private static final BlockItem creamBricksItem = new BlockItem(creamBricks, PROP);
     //private static final DirtyBrickItem creamBricksDirtyItem = new DirtyBrickItem(creamBricks, PROP);
 
+    private static final StairsBlock creamBrickStairs = new StairsBlock(() -> creamBricks.getDefaultState(), ROCK);
+    private static final BlockItem creamBrickStairsItem = new BlockItem(creamBrickStairs, PROP);
+
+    private static final SlabBlock creamBrickSlab = new SlabBlock(ROCK);
+    private static final BlockItem creamBrickSlabItem = new BlockItem(creamBrickSlab, PROP);
+
     private static final Block greyBricks = new Block(ROCK);
     private static final BlockItem greyBricksItem = new BlockItem(greyBricks, PROP);
+
+    private static final StairsBlock greyBrickStairs = new StairsBlock(() -> greyBricks.getDefaultState(), ROCK);
+    private static final BlockItem greyBrickStairsItem = new BlockItem(greyBrickStairs, PROP);
+
+    private static final SlabBlock greyBrickSlab = new SlabBlock(ROCK);
+    private static final BlockItem greyBrickSlabItem = new BlockItem(greyBrickSlab, PROP);
 
     private static final Block creamWall = new Block(ROCK);
     private static final BlockItem creamWallItem = new BlockItem(creamWall, PROP);
     
-    private static HoleyFenceNode HoleyFenceNode = new HoleyFenceNode(IRON);
-    private static BlockItem HoleyFenceNodeItem = new BlockItem(HoleyFenceNode, PROP);
+    private static final HoleyFenceNode HoleyFenceNode = new HoleyFenceNode(IRON);
+    private static final BlockItem HoleyFenceNodeItem = new BlockItem(HoleyFenceNode, PROP);
     
-    private static HoleyFenceExtension HoleyFenceExtension = new HoleyFenceExtension(IRON);
+    private static final HoleyFenceExtension HoleyFenceExtension = new HoleyFenceExtension(IRON);
     private static final BlockItem HoleyFenceExtensionItem = new BlockItem(HoleyFenceExtension, PROP);
 
     private static final MultiBlock testMultiBlock = new MultiBlock(2, 2, 3, IRON);
     private static final BlockItem testMultiBlockItem = new BlockItem(testMultiBlock, new Item.Properties());
+
+    private static final Wallpaper whiteWallpaper= new Wallpaper(0.5F, ROCK);
+    private static final BlockItem whiteWallpaperBlockItem = new BlockItem(whiteWallpaper, PROP);
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
     public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, testMultiBlock).build(null);
     
@@ -183,7 +201,11 @@ public class bcp
             		HoleyFenceNode.setRegistryName(new ResourceLocation("bcp:holey_fence_node")),
             		HoleyFenceExtension.setRegistryName(new ResourceLocation("bcp:holey_fence_extension")),
             		creamBricks.setRegistryName(new ResourceLocation("bcp:cream_bricks")),
+            		creamBrickSlab.setRegistryName(new ResourceLocation("bcp:cream_brick_slab")),
+            		creamBrickStairs.setRegistryName(new ResourceLocation("bcp:cream_brick_stairs")),
             		greyBricks.setRegistryName(new ResourceLocation("bcp:grey_bricks")),
+            		greyBrickSlab.setRegistryName(new ResourceLocation("bcp:grey_brick_slab")),
+            		greyBrickStairs.setRegistryName(new ResourceLocation("bcp:grey_brick_stairs")),
             		creamWall.setRegistryName(new ResourceLocation("bcp:cream_wall")),
             		testMultiBlock.setRegistryName(new ResourceLocation("bcp:test_multi_block")),
             		stackTraceBlock.setRegistryName(new ResourceLocation("bcp:stack_trace_block")),
@@ -192,7 +214,9 @@ public class bcp
             		creamNoiseStairs.setRegistryName(new ResourceLocation("bcp:cream_noise_stairs")),
             		greyNoiseBlock.setRegistryName(new ResourceLocation("bcp:grey_noise_block")),
             		greyNoiseSlab.setRegistryName(new ResourceLocation("bcp:grey_noise_slab")),
-            		greyNoiseStairs.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs"))
+            		greyNoiseStairs.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs")),
+            		testDoubleSizeDoor.setRegistryName(new ResourceLocation("bcp:test_double_size_door")),
+            		whiteWallpaper.setRegistryName(new ResourceLocation("bcp:white_wallpaper"))
             		);
         }
         @SubscribeEvent
@@ -203,8 +227,12 @@ public class bcp
         			HoleyFenceNodeItem.setRegistryName(new ResourceLocation("bcp:holey_fence_node_item")),
         			HoleyFenceExtensionItem.setRegistryName(new ResourceLocation("bcp:holey_fence_extension_item")),
         			creamBricksItem.setRegistryName(new ResourceLocation("bcp:cream_bricks_item")),
+            		creamBrickSlabItem.setRegistryName(new ResourceLocation("bcp:cream_brick_slab_item")),
+            		creamBrickStairsItem.setRegistryName(new ResourceLocation("bcp:cream_brick_stairs_item")),
         			greyBricksItem.setRegistryName(new ResourceLocation("bcp:grey_bricks_item")),
-        			//creamBricksDirtyItem.setRegistryName(new ResourceLocation("bcp:cream_bricks_dirty_item")),
+            		greyBrickSlabItem.setRegistryName(new ResourceLocation("bcp:grey_brick_slab_item")),
+            		greyBrickStairsItem.setRegistryName(new ResourceLocation("bcp:grey_brick_stairs_item")),
+        			//greyBricksDirtyItem.setRegistryName(new ResourceLocation("bcp:grey_bricks_dirty_item")),
         			creamWallItem.setRegistryName(new ResourceLocation("bcp:cream_wall_item")),
         			testMultiBlockItem.setRegistryName(new ResourceLocation("bcp:test_multi_block_item")),
         			stackTraceBlockItem.setRegistryName(new ResourceLocation("bcp:stack_trace_block_item")),
@@ -213,7 +241,9 @@ public class bcp
             		creamNoiseStairsItem.setRegistryName(new ResourceLocation("bcp:cream_noise_stairs_item")),
             		greyNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:grey_noise_block_item")),
             		greyNoiseSlabItem.setRegistryName(new ResourceLocation("bcp:grey_noise_slab_item")),
-            		greyNoiseStairsItem.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs_item"))
+            		greyNoiseStairsItem.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs_item")),
+            		testDoubleSizeDoorItem.setRegistryName(new ResourceLocation("bcp:test_double_size_door_item")),
+            		whiteWallpaperBlockItem.setRegistryName(new ResourceLocation("bcp:white_wallpaper_item"))
         			);
         }
     }

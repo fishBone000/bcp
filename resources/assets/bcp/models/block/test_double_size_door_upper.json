@@ -1,0 +1,11 @@
+{
+	"parent": "bcp:block/double_size_door_half",
+	"textures": {
+		"north": "bcp:block/wooden_dsd_upper",
+		"west": "bcp:block/wooden_dsd_side",
+		"south": "#north",
+		"east": "bcp:block/wooden_dsd_side",
+		"up": "bcp:block/wooden_dsd_side",
+		"down": "bcp:block/wooden_dsd_side"
+	}
+}

@@ -1,16 +1,27 @@
 {
 	"block.bcp.test_brick_block": "测试用砖",
 	"item.bcp.test_brick_item": "测试用砖", 
+
 	"block.bcp.holey_fence_node": "洞洞栏杆节点",
 	"block.bcp.holey_fence_extension": "洞洞栏杆延伸",
+
 	"block.bcp.cream_bricks": "米色砖",
+	"block.bcp.cream_brick_stairs": "米色砖楼梯",
+	"block.bcp.cream_brick_slab": "米色砖台阶",
+
 	"block.bcp.grey_bricks": "灰色砖",
+	"block.bcp.grey_brick_stairs": "灰色砖楼梯",
+	"block.bcp.grey_brick_slab": "灰色砖台阶",
+
 	"block.bcp.cream_wall": "米色墙",
+
 	"block.bcp.cream_noise_block": "米色噪点方块",
 	"block.bcp.cream_noise_stairs": "米色噪点楼梯",
 	"block.bcp.cream_noise_slab": "米色噪点台阶",
+
 	"block.bcp.grey_noise_block": "灰色噪点方块",
 	"block.bcp.grey_noise_stairs": "灰色噪点楼梯",
 	"block.bcp.grey_noise_slab": "灰色噪点台阶",
+
 	"itemGroup.BCP": "BCP"
 }

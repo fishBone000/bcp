@@ -1,0 +1,11 @@
+{
+	"multipart": [
+		{"when": {"north": false, "south": false, "west": false, "east": false, "up": false, "down": false}, "apply": {"model": "bcp:block/bug"}},
+		{"when": {"north": true}, "apply": {"model": "bcp:block/white_wallpaper_part"}},
+		{"when": {"south": true}, "apply": {"model": "bcp:block/white_wallpaper_part", "y": 180}},
+		{"when": {"east": true}, "apply": {"model": "bcp:block/white_wallpaper_part", "y": 90}},
+		{"when": {"west": true}, "apply": {"model": "bcp:block/white_wallpaper_part", "y": 270}},
+		{"when": {"up": true}, "apply": {"model": "bcp:block/white_wallpaper_part"}, "x": 270},
+		{"when": {"down": true}, "apply": {"model": "bcp:block/white_wallpaper_part", "x": 90}}
+	]
+}

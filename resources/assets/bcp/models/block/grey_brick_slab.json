@@ -1,0 +1,9 @@
+{
+	"parent": "minecraft:block/slab",
+	"textures": {
+		"bottom": "#all",
+		"top": "#all",
+		"side": "#all",
+		"all": "bcp:block/grey_bricks"
+	}
+}

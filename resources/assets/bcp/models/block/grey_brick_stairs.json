@@ -1,0 +1,9 @@
+{
+	"parent": "minecraft:block/stairs",
+	"textures": {
+		"top": "#all",
+		"bottom": "#all",
+		"side": "#all",
+		"all": "bcp:block/grey_bricks"
+	}
+}
