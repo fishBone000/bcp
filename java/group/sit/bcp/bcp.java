@@ -2,6 +2,7 @@ package group.sit.bcp;
 
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.block.SlabBlock;
@@ -17,6 +18,8 @@ import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,7 +48,7 @@ import java.util.stream.Collectors;
 public class bcp
 {
 	public static final String MODID = "bcp";
-	public static final String VERSION = "0.2 alpha";
+	public static final String VERSION = "0.2.1.1 alpha";
 	
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
@@ -68,6 +71,10 @@ public class bcp
     }).setTabPath("BCP");
 
     private static final Item.Properties PROP = new Item.Properties().group(itemGroup);
+
+    private static boolean isntSolid(BlockState state, IBlockReader reader, BlockPos pos) {
+    	return false;
+    }
 
     //  ===============================   BLOCK / ITEM INSTANCE START   ==============================
     private static final DoubleSizeDoor testDoubleSizeDoor = new DoubleSizeDoor(IRON);
@@ -128,12 +135,11 @@ public class bcp
     private static final MultiBlock testMultiBlock = new MultiBlock(2, 2, 3, IRON);
     private static final BlockItem testMultiBlockItem = new BlockItem(testMultiBlock, new Item.Properties());
 
-    private static final Wallpaper whiteWallpaper= new Wallpaper(0.5F, ROCK);
+    private static final Wallpaper whiteWallpaper= new Wallpaper(0.1F, ROCK.notSolid().setOpaque(bcp::isntSolid));
     private static final BlockItem whiteWallpaperBlockItem = new BlockItem(whiteWallpaper, PROP);
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
     public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, testMultiBlock).build(null);
     
-
     public bcp() {
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -161,6 +167,7 @@ public class bcp
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
         RenderTypeLookup.setRenderLayer(HoleyFenceNode, RenderType.getCutoutMipped());
         RenderTypeLookup.setRenderLayer(HoleyFenceExtension, RenderType.getCutoutMipped());
+        //RenderTypeLookup.setRenderLayer(whiteWallpaper, RenderType.getCutoutMipped());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

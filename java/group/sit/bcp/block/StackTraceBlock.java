@@ -13,7 +13,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
@@ -21,6 +24,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 public class StackTraceBlock extends Block {
+	public static final BooleanProperty BOOL = BooleanProperty.create("bool");
+
 	//private static final Logger LOGGER = LogManager.getLogger();
 	public StackTraceBlock() {
 		super(AbstractBlock.Properties
@@ -53,5 +58,16 @@ public class StackTraceBlock extends Block {
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		Thread.dumpStack();
 		super.onReplaced(state, worldIn, pos, newState, isMoving);
+	}
+
+	@Override
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+		Thread.dumpStack();
+		return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+	}
+
+	@Override
+	public void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(BOOL);
 	}
 }

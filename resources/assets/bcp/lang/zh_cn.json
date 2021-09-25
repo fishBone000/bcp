@@ -23,5 +23,7 @@
 	"block.bcp.grey_noise_stairs": "灰色噪点楼梯",
 	"block.bcp.grey_noise_slab": "灰色噪点台阶",
 
+	"block.bcp.white_wallpaper": "白色墙纸",
+
 	"itemGroup.BCP": "BCP"
 }

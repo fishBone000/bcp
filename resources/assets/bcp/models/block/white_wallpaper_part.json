@@ -1,9 +1,9 @@
 {
-	"textures": { "white": "bcp:block/white" },
+	"textures": { "white": "bcp:block/white", "particle": "bcp:block/white"},
 	"elements": [
 		{
 			"from": [0, 0, 0],
-			"to": [16, 16, 0.5],
+			"to": [16, 16, 0.1],
 			"faces": {
 				"south": {"uv": [0, 0, 16, 16], "texture": "#white"},
 				"up": {"uv": [0, 0, 16, 16], "texture": "#white"},
