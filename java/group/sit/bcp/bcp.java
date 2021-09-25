@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class bcp
 {
 	public static final String MODID = "bcp";
-	public static final String VERSION = "0.2.1.1 alpha";
+	public static final String VERSION = "0.2.1.2 alpha";
 	
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
@@ -135,7 +135,7 @@ public class bcp
     private static final MultiBlock testMultiBlock = new MultiBlock(2, 2, 3, IRON);
     private static final BlockItem testMultiBlockItem = new BlockItem(testMultiBlock, new Item.Properties());
 
-    private static final Wallpaper whiteWallpaper= new Wallpaper(0.1F, ROCK.notSolid().setOpaque(bcp::isntSolid));
+    private static final Wallpaper whiteWallpaper= new Wallpaper(0.3F, ROCK.notSolid().setOpaque(bcp::isntSolid));
     private static final BlockItem whiteWallpaperBlockItem = new BlockItem(whiteWallpaper, PROP);
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
     public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, testMultiBlock).build(null);
