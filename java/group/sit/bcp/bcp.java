@@ -77,8 +77,8 @@ public class bcp
     }
 
     //  ===============================   BLOCK / ITEM INSTANCE START   ==============================
-    private static final DoubleSizeDoor testDoubleSizeDoor = new DoubleSizeDoor(IRON);
-    private static final BlockItem testDoubleSizeDoorItem = new BlockItem(testDoubleSizeDoor, PROP);
+    private static final DoubleSizeDoor woodenDoubleSizeDoor = new DoubleSizeDoor(IRON);
+    private static final BlockItem woodenDoubleSizeDoorItem = new BlockItem(woodenDoubleSizeDoor, PROP);
 
     private static final Block creamNoiseBlock = new Block(ROCK);
     private static final BlockItem creamNoiseBlockItem = new BlockItem(creamNoiseBlock, PROP);
@@ -222,7 +222,7 @@ public class bcp
             		greyNoiseBlock.setRegistryName(new ResourceLocation("bcp:grey_noise_block")),
             		greyNoiseSlab.setRegistryName(new ResourceLocation("bcp:grey_noise_slab")),
             		greyNoiseStairs.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs")),
-            		testDoubleSizeDoor.setRegistryName(new ResourceLocation("bcp:test_double_size_door")),
+            		woodenDoubleSizeDoor.setRegistryName(new ResourceLocation("bcp:wooden_double_size_door")),
             		whiteWallpaper.setRegistryName(new ResourceLocation("bcp:white_wallpaper"))
             		);
         }
@@ -249,7 +249,7 @@ public class bcp
             		greyNoiseBlockItem.setRegistryName(new ResourceLocation("bcp:grey_noise_block_item")),
             		greyNoiseSlabItem.setRegistryName(new ResourceLocation("bcp:grey_noise_slab_item")),
             		greyNoiseStairsItem.setRegistryName(new ResourceLocation("bcp:grey_noise_stairs_item")),
-            		testDoubleSizeDoorItem.setRegistryName(new ResourceLocation("bcp:test_double_size_door_item")),
+            		woodenDoubleSizeDoorItem.setRegistryName(new ResourceLocation("bcp:wooden_double_size_door_item")),
             		whiteWallpaperBlockItem.setRegistryName(new ResourceLocation("bcp:white_wallpaper_item"))
         			);
         }

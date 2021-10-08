@@ -1,0 +1,22 @@
+{
+	"parent": "minecraft:block/block",
+	"textures": {
+		"north": "bcp:block/wooden_dsd_upper",
+		"south": "bcp:block/wooden_dsd_upper_flipped",
+		"east": "bcp:block/wooden_dsd_side",
+		"up": "bcp:block/wooden_dsd_side",
+		"particle": "#north"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 10],
+			"to": [16, 32, 16],
+			"faces": {
+				"north": {"texture": "#north", "uv": [0, 0, 8, 16]},
+				"south": {"texture": "#south", "uv": [8, 0, 16, 16]},
+				"east": {"texture": "#east", "uv": [0, 0, 2, 16]},
+				"up": {"texture": "#up", "uv": [8, 0, 16, 2]}
+			}
+		}
+	]
+}
