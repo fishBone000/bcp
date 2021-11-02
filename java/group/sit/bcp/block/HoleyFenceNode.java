@@ -16,6 +16,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.DoubleBlockHalf;
@@ -30,6 +31,10 @@ public class HoleyFenceNode extends CustomShapeFence {
 	private Logger LOGGER = LogManager.getLogger();
 	
 	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+	public static final IntegerProperty NORTH = IntegerProperty.create("north", 0, 3);
+	public static final IntegerProperty WEST = IntegerProperty.create("west", 0, 3);
+	public static final IntegerProperty SOUTH = IntegerProperty.create("south", 0, 3);
+	public static final IntegerProperty EAST = IntegerProperty.create("east", 0, 3);
 	
 	public HoleyFenceNode(AbstractBlock.Properties properties) {
 		this(2.0F, 2.0F, 16.0F, 6.0F, 16.0F, 16.0F, properties);
@@ -38,10 +43,10 @@ public class HoleyFenceNode extends CustomShapeFence {
 	public HoleyFenceNode(float nodeWidth, float extensionWidth, float nodeHeight, float extensionBottom, float extensionHeight, float collisionY, AbstractBlock.Properties properties) {
 		super(nodeWidth, extensionWidth, nodeHeight, extensionBottom, extensionHeight,  collisionY, properties);
 		this.setDefaultState(this.stateContainer.getBaseState()
-				.with(NORTH, false)
-				.with(SOUTH, false)
-				.with(WEST, false)
-				.with(EAST, false)
+				.with(NORTH, 0)
+				.with(SOUTH, 0)
+				.with(WEST, 0)
+				.with(EAST, 0)
 				.with(WATERLOGGED, false)
 				.with(HALF, DoubleBlockHalf.LOWER));
 	}
@@ -58,19 +63,11 @@ public class HoleyFenceNode extends CustomShapeFence {
 		BlockPos blockpos = context.getPos();
 		LOGGER.debug("HoleyFenceNode#getStateForPlacement is called at " + blockpos.toString());
 		FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-		BlockPos blockpos1 = blockpos.north();
-		BlockPos blockpos2 = blockpos.east();
-		BlockPos blockpos3 = blockpos.south();
-		BlockPos blockpos4 = blockpos.west();
-		BlockState blockstate1 = iblockreader.getBlockState(blockpos1);
-		BlockState blockstate2 = iblockreader.getBlockState(blockpos2);
-		BlockState blockstate3 = iblockreader.getBlockState(blockpos3);
-		BlockState blockstate4 = iblockreader.getBlockState(blockpos4);
 		return this.getDefaultState()
-				.with(NORTH, Boolean.valueOf(canConnect(blockstate1, iblockreader, DoubleBlockHalf.LOWER, blockpos1, Direction.NORTH)))
-				.with(EAST, Boolean.valueOf(canConnect(blockstate2, iblockreader, DoubleBlockHalf.LOWER, blockpos2, Direction.EAST)))
-				.with(SOUTH, Boolean.valueOf(canConnect(blockstate3, iblockreader, DoubleBlockHalf.LOWER, blockpos3, Direction.SOUTH)))
-				.with(WEST, Boolean.valueOf(canConnect(blockstate4, iblockreader, DoubleBlockHalf.LOWER, blockpos4, Direction.WEST)))
+				.with(NORTH, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.NORTH)))
+				.with(EAST, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.EAST)))
+				.with(SOUTH, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.SOUTH)))
+				.with(WEST, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.WEST)))
 				.with(HALF, DoubleBlockHalf.LOWER)
 				.with(WATERLOGGED, Boolean.valueOf(fluidstate.getFluid() == Fluids.WATER));
 	}
@@ -102,8 +99,8 @@ public class HoleyFenceNode extends CustomShapeFence {
 				return stateIn;
 		}
 
-		stateIn= stateIn.with(FACING_TO_PROPERTY_MAP.get(facing), Boolean.valueOf(
-						canConnect(facingState, worldIn, stateIn.get(HALF), facingPos, facing)
+		stateIn= stateIn.with(facingToProperty(facing), Integer.valueOf(
+						connectResult(worldIn, stateIn.get(HALF), currentPos, facing)
 				));
 		if(stateIn.get(HALF) == DoubleBlockHalf.UPPER)
 			worldIn.setBlockState(currentPos.down(), stateIn.with(HALF, DoubleBlockHalf.LOWER), 18);
@@ -111,20 +108,49 @@ public class HoleyFenceNode extends CustomShapeFence {
 			worldIn.setBlockState(currentPos.up(), stateIn.with(HALF, DoubleBlockHalf.UPPER), 18);
 		return stateIn;
 	}
+
+	private IntegerProperty facingToProperty(Direction facing) {
+		switch(facing) {
+			case NORTH:
+				return NORTH;
+			case WEST:
+				return WEST;
+			case SOUTH:
+				return SOUTH;
+			case EAST:
+				return EAST;
+				default:
+					throw new RuntimeException("A Direction class argument with value " + facing.toString() + " has passed to HoleyFenceNode#facingToProperty. This shouldn't happen!");
+		}
+	}
 	
-	protected boolean canConnect(BlockState stateIn, IBlockReader blockReaderIn, Enum<DoubleBlockHalf> half, BlockPos pos, Direction direction) {
-		boolean flag = false;
-		if(stateIn.getBlock() instanceof HoleyFenceNode)
-			flag = stateIn.get(HALF) == half;
-		boolean result = !cannotAttach(stateIn.getBlock()) 
-				&& stateIn.isSolidSide(blockReaderIn, pos, direction.getOpposite())
-				&&  (
-						half == DoubleBlockHalf.UPPER?
-						blockReaderIn.getBlockState(pos.down()).isSolidSide(blockReaderIn, pos.down(), direction.getOpposite())
-						:blockReaderIn.getBlockState(pos.up()).isSolidSide(blockReaderIn, pos.up(), direction.getOpposite())
-					)
-				|| flag;
-		LOGGER.debug("HoleyFenceNode#canConnect is called at " + pos.toString() + ", stateIn: " + stateIn.toString() + ", with result of" + result);
+	protected int connectResult(IBlockReader blockReaderIn, Enum<DoubleBlockHalf> thisHalf, BlockPos thisPos, Direction direction) {
+		int result;
+		BlockPos pos = thisPos.offset(direction).up();
+		BlockState state = Blocks.AIR.getDefaultState();
+		for(result = 3; result > 0; result--) {
+			pos = pos.down();
+			state = blockReaderIn.getBlockState(pos);
+			if(state.getBlock() instanceof HoleyFenceNode)
+				if(state.get(HALF) == thisHalf)
+					break;
+		}
+		if(result!=0) {
+			LOGGER.debug("HoleyFenceNode#connectResult is called at " + pos.toString() + ", state: " + state.toString() + ", with result of" + result);
+			return result;
+		}
+
+		state = blockReaderIn.getBlockState(thisPos.offset(direction));
+		if( !cannotAttach(state.getBlock()) 
+			&& state.isSolidSide(blockReaderIn, pos, direction.getOpposite())
+			&&  (
+					thisHalf == DoubleBlockHalf.UPPER?
+					blockReaderIn.getBlockState(pos.down()).isSolidSide(blockReaderIn, pos.down(), direction.getOpposite())
+					:blockReaderIn.getBlockState(pos.up()).isSolidSide(blockReaderIn, pos.up(), direction.getOpposite())
+				)
+		)
+			result = 2;
+		LOGGER.debug("HoleyFenceNode#connectResult is called at " + pos.toString() + ", state: " + state.toString() + ", with result of" + result);
 		return result;
 	}
 	
