@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class bcp
 {
 	public static final String MODID = "bcp";
-	public static final String VERSION = "0.2.1.2 alpha";
+	public static final String VERSION = "0.2.1.3 alpha";
 	
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
