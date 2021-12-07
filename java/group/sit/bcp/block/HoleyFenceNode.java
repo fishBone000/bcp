@@ -27,7 +27,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class HoleyFenceNode extends CustomShapeFence {
+public class HoleyFenceNode extends CustomSlopeFence {
 	private Logger LOGGER = LogManager.getLogger();
 	
 	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
@@ -41,7 +41,7 @@ public class HoleyFenceNode extends CustomShapeFence {
 	}
 	
 	public HoleyFenceNode(float nodeWidth, float extensionWidth, float nodeHeight, float extensionBottom, float extensionHeight, float collisionY, AbstractBlock.Properties properties) {
-		super(nodeWidth, extensionWidth, nodeHeight, extensionBottom, extensionHeight,  collisionY, properties);
+		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState()
 				.with(NORTH, 0)
 				.with(SOUTH, 0)
