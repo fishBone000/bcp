@@ -1,7 +1,7 @@
 {
     "__comment": "Model originally generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc), modified by hand by F.B.",
     "textures": {
-        "fence_face_cross": "bcp:block/fence_face_cross_slope",
+        "fence_face_cross": "bcp:block/fence_face_cross",
         "quartz_block_bottom": "minecraft:block/quartz_block_bottom",
 	"particle": "minecraft:block/quartz_block_bottom"
     },
@@ -55,6 +55,18 @@
                 "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 11.313708 ] }
             }
 	},
+        {
+            "name": "Bar 2 Backup",
+            "from": [ 7, 5, 0 ], 
+            "to": [ 9, 7, 7 ], 
+            "faces": {
+                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 2 ] },
+                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
+                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
+                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] },
+                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] }
+            }
+        },
         {
             "name": "Face",
             "from": [ 8, 9, 0 ], 

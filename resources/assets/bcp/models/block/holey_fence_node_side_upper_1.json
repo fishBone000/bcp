@@ -40,12 +40,12 @@
     "elements": [
 	{
 	    "name": "Bar 0",
-	    "from": [7, 18.792893, -1.156854],
-	    "to": [9, 20.207107, 10.156854],
+	    "from": [7, 10.792893, -1.156854],
+	    "to": [9, 12.207107, 10.156854],
 	    "rotation": {
-		"origin": [8, 19.5, 4.5],
+		"origin": [8, 11.5, 3.5],
 		"axis": "x",
-		"angle": 45
+		"angle": -45
 	    },
             "faces": {
                 "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 1.414214 ] },
@@ -57,12 +57,12 @@
 	},
 	{
 	    "name": "Bar 1",
-	    "from": [7, 12.292893, -1.156854],
-	    "to": [9, 13.707107, 10.156854],
+	    "from": [7, 4.292893, -1.156854],
+	    "to": [9, 5.707107, 10.156854],
 	    "rotation": {
-		"origin": [8, 13, 4.5],
+		"origin": [8, 5, 4.5],
 		"axis": "x",
-		"angle": 45
+		"angle": -45
 	    },
             "faces": {
                 "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 1.414214 ] },
@@ -75,10 +75,10 @@
         {
             "name": "Face",
             "from": [ 8, 0, 0 ], 
-            "to": [ 8, 16.5, 7 ], 
+            "to": [ 8, 7.5, 7 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 0.5, 4, 4, 12.25 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 4, 4, 0.5, 12.25 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 0.5, 16, 4, 4 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 4, 16, 0.5, 4 ] }
             }
         }
     ]

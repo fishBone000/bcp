@@ -31,6 +31,13 @@ public class HoleyFenceNode extends CustomSlopeFence {
 	private Logger LOGGER = LogManager.getLogger();
 	
 	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+
+	// Value of 0~3 represents the type of connection between this fence and the connected object (Another fence or a wall with 2 blocks of height).
+	// Note that a wall can only be connected horizontally (value of 2).
+	// 3: High.			The connected object's position is 1 block higher than this fence.
+	// 2: Horizontal.	The connected object is on the same level with this fence.
+	// 1: Low.			The connected object's position is 1 block lower than this fence.
+	// 0: Unconnected.	No object is connected in this direction.
 	public static final IntegerProperty NORTH = IntegerProperty.create("north", 0, 3);
 	public static final IntegerProperty WEST = IntegerProperty.create("west", 0, 3);
 	public static final IntegerProperty SOUTH = IntegerProperty.create("south", 0, 3);
