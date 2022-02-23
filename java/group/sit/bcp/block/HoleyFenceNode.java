@@ -99,7 +99,7 @@ public class HoleyFenceNode extends CustomSlopeFence {
 				return stateIn;
 		}
 
-		stateIn= stateIn.with(facingToProperty(facing), Integer.valueOf(
+		stateIn = stateIn.with(facingToProperty(facing), Integer.valueOf(
 						connectResult(worldIn, stateIn.get(HALF), currentPos, facing)
 				));
 		if(stateIn.get(HALF) == DoubleBlockHalf.UPPER)
@@ -119,14 +119,14 @@ public class HoleyFenceNode extends CustomSlopeFence {
 				return SOUTH;
 			case EAST:
 				return EAST;
-				default:
-					throw new RuntimeException("A Direction class argument with value " + facing.toString() + " has passed to HoleyFenceNode#facingToProperty. This shouldn't happen!");
+			default:
+				throw new RuntimeException("A Direction class argument with value " + facing.toString() + " has passed to HoleyFenceNode#facingToProperty. This shouldn't happen!");
 		}
 	}
 	
 	protected int connectResult(IBlockReader blockReaderIn, Enum<DoubleBlockHalf> thisHalf, BlockPos thisPos, Direction direction) {
 		int result;
-		BlockPos pos = thisPos.offset(direction).up();
+		BlockPos pos = thisPos.offset(direction).up(2);
 		BlockState state = Blocks.AIR.getDefaultState();
 		for(result = 3; result > 0; result--) {
 			pos = pos.down();
@@ -136,11 +136,12 @@ public class HoleyFenceNode extends CustomSlopeFence {
 					break;
 		}
 		if(result!=0) {
-			LOGGER.debug("HoleyFenceNode#connectResult is called at " + pos.toString() + ", state: " + state.toString() + ", with result of" + result);
+			LOGGER.debug("HoleyFenceNode#connectResult is called at " + thisPos.toString() + ", connected to " + pos.toString() + ", state: " + state.toString() + ", with result of" + result);
 			return result;
 		}
 
 		state = blockReaderIn.getBlockState(thisPos.offset(direction));
+		pos = thisPos.offset(direction);
 		if( !cannotAttach(state.getBlock()) 
 			&& state.isSolidSide(blockReaderIn, pos, direction.getOpposite())
 			&&  (
@@ -150,7 +151,7 @@ public class HoleyFenceNode extends CustomSlopeFence {
 				)
 		)
 			result = 2;
-		LOGGER.debug("HoleyFenceNode#connectResult is called at " + pos.toString() + ", state: " + state.toString() + ", with result of" + result);
+		LOGGER.debug("HoleyFenceNode#connectResult is called at " + thisPos.toString() + ", state: " + state.toString() + ", with result of" + result);
 		return result;
 	}
 	

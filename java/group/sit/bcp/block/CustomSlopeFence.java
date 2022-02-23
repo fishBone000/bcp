@@ -51,7 +51,7 @@ public class CustomSlopeFence extends Block {
    }
 
 	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return VoxelShapes.fullCube();
+		return this.shape;
 	}
 
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
@@ -63,9 +63,10 @@ public class CustomSlopeFence extends Block {
 		}
 	}
 
-   public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
+   /*public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
       return !state.get(WATERLOGGED);
    }
+   */
 
    public FluidState getFluidState(BlockState state) {
       return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
