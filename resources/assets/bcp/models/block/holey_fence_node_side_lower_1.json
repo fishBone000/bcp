@@ -1,7 +1,7 @@
 {
     "__comment": "Model originally generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc), modified by hand by F.B.",
     "textures": {
-        "fence_face_cross": "bcp:block/fence_face_cross",
+        "fence_face_cross": "bcp:block/fence_face_cross_slope",
         "quartz_block_bottom": "minecraft:block/quartz_block_bottom",
 	"particle": "minecraft:block/quartz_block_bottom"
     },
@@ -40,12 +40,12 @@
     "elements": [
 	{
 	    "name": "Bar 2",
-	    "from": [7, 9.792893, -1.156854],
-	    "to": [9, 11.207107, 10.156854],
+	    "from": [7, 1.792893, -2.156854],
+	    "to": [9, 3.207107, 9.156854],
 	    "rotation": {
-		"origin": [8, 10.5, 4.5],
+		"origin": [8, 2.5, 3.5],
 		"axis": "x",
-		"angle": 45
+		"angle": -45
 	    },
             "faces": {
                 "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 1.414214 ] },
@@ -56,24 +56,12 @@
             }
 	},
         {
-            "name": "Bar 2 Backup",
-            "from": [ 7, 5, 0 ], 
-            "to": [ 9, 7, 7 ], 
-            "faces": {
-                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 2 ] },
-                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
-                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
-                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] },
-                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] }
-            }
-        },
-        {
             "name": "Face",
-            "from": [ 8, 9, 0 ], 
+            "from": [ 8, 0, 0 ], 
             "to": [ 8, 16, 7 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 0.5, 12.25, 4, 15.75 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 4, 12.25, 0.5, 15.75 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 15.5, 3.75, 12, 11.75 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 12, 3.75, 15.5, 11.75 ] }
             }
         }
     ]

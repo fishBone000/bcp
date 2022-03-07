@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import group.sit.bcp.bcp;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -138,9 +137,19 @@ public class HoleyFenceNode extends CustomSlopeFence {
 		for(result = 3; result > 0; result--) {
 			pos = pos.down();
 			state = blockReaderIn.getBlockState(pos);
-			if(state.getBlock() instanceof HoleyFenceNode)
-				if(state.get(HALF) == thisHalf)
-					break;
+			if(state.getBlock() instanceof HoleyFenceNode) {
+				Enum<DoubleBlockHalf> half = state.get(HALF);
+				Enum<DoubleBlockHalf> opHalf = half == DoubleBlockHalf.UPPER?DoubleBlockHalf.LOWER:DoubleBlockHalf.UPPER;
+				if(half == thisHalf) {
+					BlockPos pos1 = half == DoubleBlockHalf.UPPER?pos.down():pos.up();
+					LOGGER.debug("connectResult: pos1: " + pos1.toString());
+					BlockState state1 = blockReaderIn.getBlockState(pos1);
+					LOGGER.debug("connectResult: state: " + state1.toString());
+					if(state1.getBlock() instanceof HoleyFenceNode)
+						if(state1.get(HALF) == opHalf)
+							break;
+				}
+			}
 		}
 		if(result!=0) {
 			LOGGER.debug("HoleyFenceNode#connectResult is called at " + thisPos.toString() + ", connected to " + pos.toString() + ", state: " + state.toString() + ", with result of" + result);

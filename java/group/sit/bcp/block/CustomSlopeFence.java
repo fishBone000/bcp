@@ -36,7 +36,7 @@ public class CustomSlopeFence extends Block {
 	// TODO Check functions required to perform features of WATERLOGGED
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-	public CustomSlopeFence(AbstractBlock.Properties properties) {
+	public CustomSlopeFence(AbstractBlock.Properties properties, float nodeWidth, float extensionWidth, float extensionHeight) {
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, 0).with(EAST, 0).with(SOUTH, 0).with(WEST, 0).with(WATERLOGGED, Boolean.valueOf(false)));
 		
