@@ -42,12 +42,8 @@ public class HoleyFenceNode extends CustomSlopeFence {
 	public static final IntegerProperty SOUTH = IntegerProperty.create("south", 0, 3);
 	public static final IntegerProperty EAST = IntegerProperty.create("east", 0, 3);
 	
-	public HoleyFenceNode(AbstractBlock.Properties properties) {
-		this(2.0F, 2.0F, 16.0F, 6.0F, 16.0F, 16.0F, properties);
-	}
-	
-	public HoleyFenceNode(float nodeWidth, float extensionWidth, float nodeHeight, float extensionBottom, float extensionHeight, float collisionY, AbstractBlock.Properties properties) {
-		super(properties);
+	public HoleyFenceNode(float nodeWidth, float extensionWidth, float extensionHeight, AbstractBlock.Properties properties) {
+		super(nodeWidth, extensionWidth, extensionHeight, properties);
 		this.setDefaultState(this.stateContainer.getBaseState()
 				.with(NORTH, 0)
 				.with(SOUTH, 0)

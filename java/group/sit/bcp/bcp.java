@@ -126,7 +126,7 @@ public class bcp
     private static final Block creamWall = new Block(ROCK);
     private static final BlockItem creamWallItem = new BlockItem(creamWall, PROP);
     
-    private static final HoleyFenceNode HoleyFenceNode = new HoleyFenceNode(IRON);
+    private static final HoleyFenceNode HoleyFenceNode = new HoleyFenceNode(1.0F, 1.0F, 16.0F, IRON);
     private static final BlockItem HoleyFenceNodeItem = new BlockItem(HoleyFenceNode, PROP);
     
     private static final HoleyFenceExtension HoleyFenceExtension = new HoleyFenceExtension(IRON);

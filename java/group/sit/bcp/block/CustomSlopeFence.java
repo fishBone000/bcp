@@ -26,8 +26,6 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 
 public class CustomSlopeFence extends Block {
-	private final VoxelShape shape = Block.makeCuboidShape(7, 0, 7, 9, 16, 9);
-	// TODO Complete this feature
 
 	public static final IntegerProperty NORTH = IntegerProperty.create("north", 0, 3);
 	public static final IntegerProperty WEST = IntegerProperty.create("west", 0, 3);
@@ -36,22 +34,67 @@ public class CustomSlopeFence extends Block {
 	// TODO Check functions required to perform features of WATERLOGGED
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-	public CustomSlopeFence(AbstractBlock.Properties properties, float nodeWidth, float extensionWidth, float extensionHeight) {
+	// An array of 16 VoxelShapes
+	// Index of each element can be obtained by ORing flags:
+	// 1: North connected
+	// 2: West connected
+	// 4: South connected
+	// 8: East connected
+	protected VoxelShape shapes[];
+
+	public CustomSlopeFence(float nodeWidth, float extensionWidth, float extensionHeight, AbstractBlock.Properties properties) {
+	//public CustomSlopeFence(AbstractBlock.Properties properties) {
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, 0).with(EAST, 0).with(SOUTH, 0).with(WEST, 0).with(WATERLOGGED, Boolean.valueOf(false)));
+		shapes = makeShapes(nodeWidth, extensionWidth, extensionHeight);
 		
 	}
 
+	protected VoxelShape[] makeShapes(float nodeWidth, float extensionWidth, float extensionHeight) {
+		VoxelShape result[] = new VoxelShape[16];
+		VoxelShape node = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F-nodeWidth, 8.0F+nodeWidth, extensionHeight, 8.0F+nodeWidth);
+		VoxelShape north = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 0F, 8.0F+nodeWidth, extensionHeight, 8.0F-nodeWidth);
+		VoxelShape west = Block.makeCuboidShape(0F, 0F, 8.0F-nodeWidth, 8.0F-nodeWidth, extensionHeight, 8.0F+nodeWidth);
+		VoxelShape south = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F+nodeWidth, 8.0F+nodeWidth, extensionHeight, 16.0F);
+		VoxelShape east = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-nodeWidth, 16.0F, extensionHeight, 8.0F+nodeWidth);
+		for(int i = 0; i < 16; i++) {
+			result[i] = node;
+			if((i & 1) != 0)
+				result[i] = VoxelShapes.or(result[i], north);
+			if((i & 2) != 0)
+				result[i] = VoxelShapes.or(result[i], west);
+			if((i & 4) != 0)
+				result[i] = VoxelShapes.or(result[i], south);
+			if((i & 8) != 0)
+				result[i] = VoxelShapes.or(result[i], east);
+		}
+		return result;
+		
+	}
+
+	private VoxelShape getShape(BlockState state) {
+		int flags = 0;
+		if(state.get(NORTH) != 0)
+			flags += 1;
+		if(state.get(WEST) != 0)
+			flags += 2;
+		if(state.get(SOUTH) != 0)
+			flags += 4;
+		if(state.get(EAST) != 0)
+			flags += 8;
+		return shapes[flags];
+	}
+
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return this.shape;
+		return getShape(state);
 	}
 
    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-	   return this.shape;
+		return getShape(state);
    }
 
 	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return this.shape;
+		return getShape(state);
 	}
 
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
