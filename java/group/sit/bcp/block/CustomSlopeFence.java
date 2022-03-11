@@ -36,27 +36,35 @@ public class CustomSlopeFence extends Block {
 
 	// An array of 16 VoxelShapes
 	// Index of each element can be obtained by ORing flags:
-	// 1: North connected
-	// 2: West connected
-	// 4: South connected
-	// 8: East connected
+	// 1:	North connected, low or horizontal
+	// 2:	West connected, low or horizontal
+	// 4:	South connected, low or horizontal
+	// 8:	East connected, low or horizontal
+	// 16:	North connected, High
+	// 32:	West connected, High
+	// 64:	South connected, High
+	// 128:	East connected, High
 	protected VoxelShape shapes[];
 
-	public CustomSlopeFence(float nodeWidth, float extensionWidth, float extensionHeight, AbstractBlock.Properties properties) {
+	public CustomSlopeFence(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight, AbstractBlock.Properties properties) {
 	//public CustomSlopeFence(AbstractBlock.Properties properties) {
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, 0).with(EAST, 0).with(SOUTH, 0).with(WEST, 0).with(WATERLOGGED, Boolean.valueOf(false)));
-		shapes = makeShapes(nodeWidth, extensionWidth, extensionHeight);
+		shapes = makeShapes(nodeWidth, extensionWidth, extensionHeight, extraHeight);
 		
 	}
 
-	protected VoxelShape[] makeShapes(float nodeWidth, float extensionWidth, float extensionHeight) {
+	protected VoxelShape[] makeShapes(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight) {
 		VoxelShape result[] = new VoxelShape[16];
 		VoxelShape node = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F-nodeWidth, 8.0F+nodeWidth, extensionHeight, 8.0F+nodeWidth);
 		VoxelShape north = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 0F, 8.0F+nodeWidth, extensionHeight, 8.0F-nodeWidth);
 		VoxelShape west = Block.makeCuboidShape(0F, 0F, 8.0F-nodeWidth, 8.0F-nodeWidth, extensionHeight, 8.0F+nodeWidth);
 		VoxelShape south = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F+nodeWidth, 8.0F+nodeWidth, extensionHeight, 16.0F);
 		VoxelShape east = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-nodeWidth, 16.0F, extensionHeight, 8.0F+nodeWidth);
+		VoxelShape northHigh = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 0F, 8.0F+nodeWidth, extraHeight, 8.0F-nodeWidth);
+		VoxelShape westHigh = Block.makeCuboidShape(0F, 0F, 8.0F-nodeWidth, 8.0F-nodeWidth, extraHeight, 8.0F+nodeWidth);
+		VoxelShape southHigh = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F+nodeWidth, 8.0F+nodeWidth, extraHeight, 16.0F);
+		VoxelShape eastHigh = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-nodeWidth, 16.0F, extraHeight, 8.0F+nodeWidth);
 		for(int i = 0; i < 16; i++) {
 			result[i] = node;
 			if((i & 1) != 0)
@@ -67,9 +75,16 @@ public class CustomSlopeFence extends Block {
 				result[i] = VoxelShapes.or(result[i], south);
 			if((i & 8) != 0)
 				result[i] = VoxelShapes.or(result[i], east);
+			if((i & 16) != 0)
+				result[i] = VoxelShapes.or(result[i], northHigh);
+			if((i & 32) != 0)
+				result[i] = VoxelShapes.or(result[i], westHigh);
+			if((i & 64) != 0)
+				result[i] = VoxelShapes.or(result[i], southHigh);
+			if((i & 128) != 0)
+				result[i] = VoxelShapes.or(result[i], eastHigh);
 		}
 		return result;
-		
 	}
 
 	private VoxelShape getShape(BlockState state) {
