@@ -40,8 +40,8 @@
     "elements": [
         {
             "name": "Bar 2",
-            "from": [ 7, 5, 0 ], 
-            "to": [ 9, 7, 7 ], 
+            "from": [ 7, 10, 0 ], 
+            "to": [ 9, 12, 7 ], 
             "faces": {
                 "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 2 ] },
                 "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
@@ -55,8 +55,8 @@
             "from": [ 8, 7, 0 ], 
             "to": [ 8, 16, 7 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 0.5, 3.636, 4, 8.25 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 4, 3.636, 0.5, 8.25 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 0.75, 5.625, 6, 8.625 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 6, 5.625, 0.75, 8.625 ] }
             }
         }
     ]

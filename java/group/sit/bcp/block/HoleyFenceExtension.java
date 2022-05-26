@@ -17,7 +17,7 @@ public class HoleyFenceExtension extends HoleyFenceNode {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public HoleyFenceExtension(AbstractBlock.Properties properties) {
-		super(0F, 2.0F, 16.0F, properties);
+		super(0F, 2.0F, 16.0F, 25.0F, properties);
 	}
 	
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {

@@ -39,9 +39,21 @@
     },
     "elements": [
         {
+            "name": "Bar 0",
+            "from": [ 7, 14, 0 ], 
+            "to": [ 9, 16, 7 ], 
+            "faces": {
+                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 2 ] },
+                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
+                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
+                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] },
+                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] }
+            }
+        },
+        {
             "name": "Bar 1",
-            "from": [ 7, 7.5, 0 ], 
-            "to": [ 9, 9.5, 7 ], 
+            "from": [ 7, 9.5, 0 ], 
+            "to": [ 9, 11.5, 7 ], 
             "faces": {
                 "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 2 ] },
                 "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
@@ -55,20 +67,8 @@
             "from": [ 8, 0, 0 ], 
             "to": [ 8, 7.5, 7 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 0.5, 0, 4, 3.636 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 4, 0, 0.5, 3.636 ] }
-            }
-        },
-        {
-            "name": "Bar 0",
-            "from": [ 7, 14, 0 ], 
-            "to": [ 9, 16, 7 ], 
-            "faces": {
-                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 2 ] },
-                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
-                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 7, 2 ] },
-                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] },
-                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 7 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 0.75, 0, 6, 5.625 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 6, 0, 0.75, 5.625 ] }
             }
         }
     ]
