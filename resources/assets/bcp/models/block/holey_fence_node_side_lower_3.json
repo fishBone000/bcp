@@ -57,11 +57,11 @@
 	},
         {
             "name": "Face",
-            "from": [ 8, 9, 0 ], 
+            "from": [ 8, 14, 0 ], 
             "to": [ 8, 16, 7 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 0.5, 12.25, 4, 15.75 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 4, 12.25, 0.5, 15.75 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 0.375, 9.1875, 3, 9.9375 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 3, 9.1875, 0.375, 9.9375 ] }
             }
         }
     ]

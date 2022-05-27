@@ -77,8 +77,8 @@
             "from": [ 8, 0, 0 ], 
             "to": [ 8, 16.5, 7 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 0.5, 4, 4, 12.25 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 4, 4, 0.5, 12.25 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 0.375, 3, 3, 9.1875 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 3, 3, 0.375, 9.1875 ] }
             }
         }
     ]
