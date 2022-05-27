@@ -40,10 +40,10 @@
     "elements": [
 	{
 	    "name": "Bar 2",
-	    "from": [7, 10.585786, -4.313708],
-	    "to": [9, 12, 7],
+	    "from": [7, 1.792893, -2.156854],
+	    "to": [9, 3.207107, 9.156854],
 	    "rotation": {
-		"origin": [8, 12, 7],
+		"origin": [8, 2.5, 3.5],
 		"axis": "x",
 		"angle": -45
 	    },
@@ -57,11 +57,11 @@
 	},
         {
             "name": "Face",
-            "from": [ 8, 5, 0 ], 
+            "from": [ 8, 0, 0 ], 
             "to": [ 8, 16, 7 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 8.375, 2.8125, 11, 6.9375 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 11, 2.8125, 8.375, 6.9375 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 15.5, 3.75, 12, 11.75 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 12, 3.75, 15.5, 11.75 ] }
             }
         }
     ]
