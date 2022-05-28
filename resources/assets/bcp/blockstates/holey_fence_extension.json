@@ -3,99 +3,99 @@
     {"apply": { "model": "bcp:block/holey_fence_extension_post"} },
 
     { "when":{ "half": "upper", "north": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1"}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_1"}
     },
 
     { "when":{ "half": "upper", "north": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2"}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_2"}
     },
 
     { "when":{ "half": "upper", "north": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3"}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_3"}
     },
 
     { "when":{ "half": "lower", "north": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1"}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_1"}
     },
 
     { "when":{ "half": "lower", "north": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2"}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_2"}
     },
 
     { "when":{ "half": "lower", "north": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3"}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_3"}
     },
 
     { "when":{ "half": "upper", "west": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1", "y": 270}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_1", "y": 270}
     },
 
     { "when":{ "half": "upper", "west": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2", "y": 270}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_2", "y": 270}
     },
 
     { "when":{ "half": "upper", "west": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3", "y": 270}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_3", "y": 270}
     },
 
     { "when":{ "half": "lower", "west": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1", "y": 270}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_1", "y": 270}
     },
 
     { "when":{ "half": "lower", "west": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2", "y": 270}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_2", "y": 270}
     },
 
     { "when":{ "half": "lower", "west": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3", "y": 270}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_3", "y": 270}
     },
 
     { "when":{ "half": "upper", "south": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1", "y": 180}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_1", "y": 180}
     },
 
     { "when":{ "half": "upper", "south": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2", "y": 180}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_2", "y": 180}
     },
 
     { "when":{ "half": "upper", "south": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3", "y": 180}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_3", "y": 180}
     },
 
     { "when":{ "half": "lower", "south": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1", "y": 180}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_1", "y": 180}
     },
 
     { "when":{ "half": "lower", "south": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2", "y": 180}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_2", "y": 180}
     },
 
     { "when":{ "half": "lower", "south": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3", "y": 180}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_3", "y": 180}
     },
 
     { "when":{ "half": "upper", "east": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1", "y": 90}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_1", "y": 90}
     },
 
     { "when":{ "half": "upper", "east": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2", "y": 90}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_2", "y": 90}
     },
 
     { "when":{ "half": "upper", "east": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3", "y": 90}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_upper_3", "y": 90}
     },
 
     { "when":{ "half": "lower", "east": "1"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_1", "y": 90}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_1", "y": 90}
     },
 
     { "when":{ "half": "lower", "east": "2"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_2", "y": 90}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_2", "y": 90}
     },
 
     { "when":{ "half": "lower", "east": "3"},
-      "apply": { "model": "bcp:block/holey_fence_extention_side_upper_3", "y": 90}
+      "apply": { "model": "bcp:block/holey_fence_extension_side_lower_3", "y": 90}
     }
   ]
 }

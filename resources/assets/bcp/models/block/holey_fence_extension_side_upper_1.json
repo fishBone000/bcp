@@ -1,0 +1,85 @@
+{
+    "__comment": "Model hand written by FishBone000",
+    "textures": {
+        "fence_face_cross": "bcp:block/fence_face_cross_slope",
+        "quartz_block_bottom": "minecraft:block/quartz_block_bottom",
+	"particle": "minecraft:block/quartz_block_bottom"
+    },
+    "display": {
+        "gui": {
+            "rotation": [ 20, -132, 0 ],
+            "translation": [ -2.5, -1, 0 ],
+            "scale": [ 0.45, 0.45, 0.45 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 1, 0 ],
+            "scale": [ 0.3, 0.3, 0.3 ]
+        },
+        "fixed": {
+            "rotation": [ 0, -3, 0 ],
+            "translation": [ 2.5, 0, 0 ],
+            "scale": [ 0.3, 0.3, 0.3 ]
+        },
+        "head": {
+            "rotation": [ 0, 96, 0 ],
+            "translation": [ 0, 8.5, -12.25 ],
+            "scale": [ 0.82, 0.79, 0.82 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 1, -163, 0 ],
+            "translation": [ 0.25, 1.75, 0 ],
+            "scale": [ 0.3, 0.3, 0.3 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 54, 85, 0 ],
+            "translation": [ 0, 4.25, -1 ],
+            "scale": [ 0.3, 0.3, 0.3 ]
+        }
+    },
+    "elements": [
+	{
+	    "name": "Bar 0",
+	    "from": [7, 10.085786, -2.156854],
+	    "to": [9, 12.207107, 9.156854],
+	    "rotation": {
+		"origin": [8, 11.5, 3.5],
+		"axis": "x",
+		"angle": -45
+	    },
+            "faces": {
+                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 1.414214 ] },
+                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 11.313708, 1.414214 ] },
+                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 11.313708, 1.414214 ] },
+                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 11.313708 ] },
+                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 11.313708 ] }
+            }
+	},
+	{
+	    "name": "Bar 1",
+	    "from": [7, 4.292893, -2.156854],
+	    "to": [9, 5.707107, 9.156854],
+	    "rotation": {
+		"origin": [8, 5, 3.5],
+		"axis": "x",
+		"angle": -45
+	    },
+            "faces": {
+                "north": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 1.414214 ] },
+                "east": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 11.313708, 1.414214 ] },
+                "west": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 11.313708, 1.414214 ] },
+                "up": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 11.313708 ] },
+                "down": { "texture": "#quartz_block_bottom", "uv": [ 0, 0, 2, 11.313708 ] }
+            }
+	},
+        {
+            "name": "Face",
+            "from": [ 8, 0, 0 ], 
+            "to": [ 8, 7.5, 7 ], 
+            "faces": {
+                "east": { "texture": "#fence_face_cross", "uv": [ 8.375, 0, 11, 2.8125 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 11, 0, 8.375, 2.8125 ] }
+            }
+        }
+    ]
+}
