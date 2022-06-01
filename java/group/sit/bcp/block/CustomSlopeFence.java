@@ -57,14 +57,14 @@ public class CustomSlopeFence extends Block {
 	protected VoxelShape[] makeShapes(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight) {
 		VoxelShape result[] = new VoxelShape[16];
 		VoxelShape node = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F-nodeWidth, 8.0F+nodeWidth, extensionHeight, 8.0F+nodeWidth);
-		VoxelShape north = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 0F, 8.0F+nodeWidth, extensionHeight, 8.0F-nodeWidth);
-		VoxelShape west = Block.makeCuboidShape(0F, 0F, 8.0F-nodeWidth, 8.0F-nodeWidth, extensionHeight, 8.0F+nodeWidth);
-		VoxelShape south = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F+nodeWidth, 8.0F+nodeWidth, extensionHeight, 16.0F);
-		VoxelShape east = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-nodeWidth, 16.0F, extensionHeight, 8.0F+nodeWidth);
-		VoxelShape northHigh = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 0F, 8.0F+nodeWidth, extraHeight, 8.0F-nodeWidth);
-		VoxelShape westHigh = Block.makeCuboidShape(0F, 0F, 8.0F-nodeWidth, 8.0F-nodeWidth, extraHeight, 8.0F+nodeWidth);
-		VoxelShape southHigh = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F+nodeWidth, 8.0F+nodeWidth, extraHeight, 16.0F);
-		VoxelShape eastHigh = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-nodeWidth, 16.0F, extraHeight, 8.0F+nodeWidth);
+		VoxelShape north = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 0F, 8.0F+extensionWidth, extensionHeight, 8.0F-nodeWidth);
+		VoxelShape west = Block.makeCuboidShape(0F, 0F, 8.0F-extensionWidth, 8.0F-nodeWidth, extensionHeight, 8.0F+extensionWidth);
+		VoxelShape south = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 8.0F+nodeWidth, 8.0F+extensionWidth, extensionHeight, 16.0F);
+		VoxelShape east = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-extensionWidth, 16.0F, extensionHeight, 8.0F+extensionWidth);
+		VoxelShape northHigh = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 0F, 8.0F+extensionWidth, extraHeight, 8.0F-nodeWidth);
+		VoxelShape westHigh = Block.makeCuboidShape(0F, 0F, 8.0F-extensionWidth, 8.0F-nodeWidth, extraHeight, 8.0F+extensionWidth);
+		VoxelShape southHigh = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 8.0F+nodeWidth, 8.0F+extensionWidth, extraHeight, 16.0F);
+		VoxelShape eastHigh = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-extensionWidth, 16.0F, extraHeight, 8.0F+extensionWidth);
 		for(int i = 0; i < 16; i++) {
 			result[i] = node;
 			if((i & 1) != 0)

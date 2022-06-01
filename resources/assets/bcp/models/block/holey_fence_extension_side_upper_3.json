@@ -75,10 +75,10 @@
         {
             "name": "Face",
             "from": [ 8, 0, 0 ], 
-            "to": [ 8, 16.5, 7 ], 
+            "to": [ 8, 16.5, 8 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 0.375, 3, 3, 9.1875 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 3, 3, 0.375, 9.1875 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 3, 0, 6, 6.1875 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 6, 0, 3, 6.1875 ] }
             }
         }
     ]

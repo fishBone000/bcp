@@ -55,8 +55,8 @@
             "from": [ 8, 0, 0 ], 
             "to": [ 8, 7.5, 8 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 8, 0, 4, 3.636 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 4, 0, 8, 3.636 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 6, 0, 12, 5.625 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 12, 0, 6, 5.625 ] }
             }
         },
         {
