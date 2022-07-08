@@ -2,8 +2,8 @@
     "__comment": "Model originally generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc), modified by hand by F.B.",
     "textures": {
         "fence_face_cross": "bcp:block/fence_face_cross_slope",
-        "quartz_block_bottom": "minecraft:block/quartz_block_bottom",
-	"particle": "minecraft:block/quartz_block_bottom"
+        "quartz_block_bottom": "bcp:block/white",
+	"particle": "bcp:block/white"
     },
     "display": {
         "gui": {
@@ -58,10 +58,10 @@
         {
             "name": "Face",
             "from": [ 8, 0, 0 ], 
-            "to": [ 8, 16, 7 ], 
+            "to": [ 8, 16, 8 ], 
             "faces": {
-                "east": { "texture": "#fence_face_cross", "uv": [ 11, 5.4375, 14, 11.8125 ] },
-                "west": { "texture": "#fence_face_cross", "uv": [ 14, 5.4375, 11, 11.8125 ] }
+                "east": { "texture": "#fence_face_cross", "uv": [ 11, 5.8125, 14, 11.8125 ] },
+                "west": { "texture": "#fence_face_cross", "uv": [ 14, 5.8125, 11, 11.8125 ] }
             }
         }
     ]

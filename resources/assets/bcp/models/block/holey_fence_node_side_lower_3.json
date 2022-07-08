@@ -2,8 +2,8 @@
     "__comment": "Model originally generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc), modified by hand by F.B.",
     "textures": {
         "fence_face_cross": "bcp:block/fence_face_cross_slope",
-        "quartz_block_bottom": "minecraft:block/quartz_block_bottom",
-	"particle": "minecraft:block/quartz_block_bottom"
+        "quartz_block_bottom": "bcp:block/white",
+	"particle": "bcp:block/white"
     },
     "display": {
         "gui": {

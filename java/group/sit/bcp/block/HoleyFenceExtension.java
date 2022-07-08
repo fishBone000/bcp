@@ -21,8 +21,11 @@ public class HoleyFenceExtension extends HoleyFenceNode {
 	}
 	
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		LOGGER.debug(this.toString() + "'s isValidPosition is called at pos : " + pos.toString());
-		return super.isValidPosition(state, worldIn, pos) && hasNeighborNode(state, worldIn, pos);
+		LOGGER.debug(this.toString() + "'s isValidPosition is called at pos : " + pos.toString() + ", with state: " + state.toString());
+		return state.get(NORTH) != 0
+				|| state.get(WEST) != 0
+				|| state.get(SOUTH) != 0
+				|| state.get(EAST) != 0;
 	}
 	
 	boolean hasNeighborNode(BlockState state, IWorldReader worldIn, BlockPos pos) {
@@ -38,9 +41,15 @@ public class HoleyFenceExtension extends HoleyFenceNode {
 	
 	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		LOGGER.debug(this.toString() + "'s updatePostPlacement is called at pos : " + currentPos.toString());
-		if(hasNeighborNode(stateIn, worldIn, currentPos))
-			return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-		else
-			return Blocks.AIR.getDefaultState();
+		BlockState state = super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+		if(state.getBlock() instanceof HoleyFenceNode) {
+			if(state.get(NORTH) != 0
+					|| state.get(WEST) != 0
+					|| state.get(SOUTH) != 0
+					|| state.get(EAST) != 0
+			)
+				return state;
+		}
+		return Blocks.AIR.getDefaultState();
 	}
 }
