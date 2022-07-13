@@ -1,24 +1,24 @@
 package group.sit.bcp;
 
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.AbstractBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Item.Properties;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.Properties;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,8 +34,8 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 import group.sit.bcp.block.*;
 import group.sit.bcp.item.*;
@@ -51,26 +51,26 @@ public class bcp
 	public static final String VERSION = "0.2.2 alpha";
 	
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final AbstractBlock.Properties ROCK = AbstractBlock.Properties
-    		.create(Material.ROCK)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool();
+    private static final BlockBehaviour.Properties ROCK = BlockBehaviour.Properties
+    		.of(Material.STONE)
+    		.strength(2.0F, 6.0F)
+    		.requiresCorrectToolForDrops();
 
-    private static final AbstractBlock.Properties IRON = AbstractBlock.Properties
-    		.create(Material.IRON)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool();
+    private static final BlockBehaviour.Properties IRON = BlockBehaviour.Properties
+    		.of(Material.STONE)
+    		.strength(2.0F, 6.0F)
+    		.requiresCorrectToolForDrops();
 
-    private static final ItemGroup itemGroup = (new ItemGroup("BCP"){
+    private static final CreativeModeTab TAB = (new CreativeModeTab("BCP"){
     	@OnlyIn(Dist.CLIENT)
-    	public ItemStack createIcon() {
+    	public ItemStack makeIcon() {
     		return new ItemStack(creamNoiseBlock);
     	}
-    }).setTabPath("BCP");
+    });
 
-    private static final Item.Properties PROP = new Item.Properties().group(itemGroup);
+    private static final Item.Properties PROP = new Item.Properties().tab(TAB);
 
     private static boolean isntSolid(BlockState state, IBlockReader reader, BlockPos pos) {
     	return false;
@@ -135,7 +135,7 @@ public class bcp
     private static final MultiBlock testMultiBlock = new MultiBlock(2, 2, 3, IRON);
     private static final BlockItem testMultiBlockItem = new BlockItem(testMultiBlock, new Item.Properties());
 
-    private static final Wallpaper whiteWallpaper= new Wallpaper(0.3F, ROCK.notSolid().setOpaque(bcp::isntSolid));
+    private static final Wallpaper whiteWallpaper= new Wallpaper(0.3F, ROCK.noCollission());
     private static final BlockItem whiteWallpaperBlockItem = new BlockItem(whiteWallpaper, PROP);
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
     public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, testMultiBlock).build(null);
