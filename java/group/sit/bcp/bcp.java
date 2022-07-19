@@ -1,6 +1,8 @@
 package group.sit.bcp;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -11,15 +13,13 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,15 +31,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
 
 import group.sit.bcp.block.*;
-import group.sit.bcp.item.*;
-import group.sit.bcp.tileentity.MainBlockPosTE;
+import group.sit.bcp.blockentities.MainBlockPosBE;
 
 import java.util.stream.Collectors;
 
@@ -72,7 +70,7 @@ public class bcp
 
     private static final Item.Properties PROP = new Item.Properties().tab(TAB);
 
-    private static boolean isntSolid(BlockState state, IBlockReader reader, BlockPos pos) {
+    private static boolean isntSolid(BlockState pState, BlockGetter reader, BlockPos pPos) {
     	return false;
     }
 
@@ -83,7 +81,7 @@ public class bcp
     private static final Block creamNoiseBlock = new Block(ROCK);
     private static final BlockItem creamNoiseBlockItem = new BlockItem(creamNoiseBlock, PROP);
 
-    private static final StairsBlock creamNoiseStairs = new StairsBlock(() -> creamNoiseBlock.getDefaultState(), ROCK);
+    private static final StairBlock creamNoiseStairs = new StairBlock(() -> creamNoiseBlock.defaultBlockState(), ROCK);
     private static final BlockItem creamNoiseStairsItem = new BlockItem(creamNoiseStairs, PROP);
 
     private static final SlabBlock creamNoiseSlab = new SlabBlock(ROCK);
@@ -95,7 +93,7 @@ public class bcp
     private static final SlabBlock greyNoiseSlab = new SlabBlock(ROCK);
     private static final BlockItem greyNoiseSlabItem = new BlockItem(greyNoiseSlab, PROP);
 
-    private static final StairsBlock greyNoiseStairs = new StairsBlock(() -> greyNoiseBlock.getDefaultState(), ROCK);
+    private static final StairBlock greyNoiseStairs = new StairBlock(() -> greyNoiseBlock.defaultBlockState(), ROCK);
     private static final BlockItem greyNoiseStairsItem = new BlockItem(greyNoiseStairs, PROP);
 
     private static final StackTraceBlock stackTraceBlock = new StackTraceBlock();
@@ -108,7 +106,7 @@ public class bcp
     private static final BlockItem creamBricksItem = new BlockItem(creamBricks, PROP);
     //private static final DirtyBrickItem creamBricksDirtyItem = new DirtyBrickItem(creamBricks, PROP);
 
-    private static final StairsBlock creamBrickStairs = new StairsBlock(() -> creamBricks.getDefaultState(), ROCK);
+    private static final StairBlock creamBrickStairs = new StairBlock(() -> creamBricks.defaultBlockState(), ROCK);
     private static final BlockItem creamBrickStairsItem = new BlockItem(creamBrickStairs, PROP);
 
     private static final SlabBlock creamBrickSlab = new SlabBlock(ROCK);
@@ -117,7 +115,7 @@ public class bcp
     private static final Block greyBricks = new Block(ROCK);
     private static final BlockItem greyBricksItem = new BlockItem(greyBricks, PROP);
 
-    private static final StairsBlock greyBrickStairs = new StairsBlock(() -> greyBricks.getDefaultState(), ROCK);
+    private static final StairBlock greyBrickStairs = new StairBlock(() -> greyBricks.defaultBlockState(), ROCK);
     private static final BlockItem greyBrickStairsItem = new BlockItem(greyBrickStairs, PROP);
 
     private static final SlabBlock greyBrickSlab = new SlabBlock(ROCK);
@@ -138,24 +136,24 @@ public class bcp
     private static final Wallpaper whiteWallpaper= new Wallpaper(0.3F, ROCK.noCollission());
     private static final BlockItem whiteWallpaperBlockItem = new BlockItem(whiteWallpaper, PROP);
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
-    public static TileEntityType<MainBlockPosTE> mainBlockPosTEType =  TileEntityType.Builder.create(MainBlockPosTE::new, testMultiBlock).build(null);
+    public static BlockEntityType<MainBlockPosBE> mainBlockPosBEType =  BlockEntityType.Builder.of(MainBlockPosBE::new, testMultiBlock).build(null);
     
     public bcp() {
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.getValue().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        FMLJavaModLoadingContext.getValue().getModEventBus().addListener(this::enqueueIMC);
         // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+        FMLJavaModLoadingContext.getValue().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        FMLJavaModLoadingContext.getValue().getModEventBus().addListener(this::doClientStuff);
         
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
+    private void setabove(final FMLCommonSetupEvent event)
     {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
@@ -164,7 +162,7 @@ public class bcp
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
-        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
+        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().getValue().gameSettings);
         RenderTypeLookup.setRenderLayer(HoleyFenceNode, RenderType.getCutoutMipped());
         RenderTypeLookup.setRenderLayer(HoleyFenceExtension, RenderType.getCutoutMipped());
         //RenderTypeLookup.setRenderLayer(whiteWallpaper, RenderType.getCutoutMipped());
@@ -180,7 +178,7 @@ public class bcp
     {
         // some example code to receive and process InterModComms from other mods
         LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.getMessageSupplier().get()).
+                map(m->m.getMessageSupplier().getValue()).
                 collect(Collectors.toList()));
     }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -195,8 +193,8 @@ public class bcp
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
     	@SubscribeEvent
-    	public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> teTypeRegistryEvent) {
-    		teTypeRegistryEvent.getRegistry().register(mainBlockPosTEType.setRegistryName(new ResourceLocation("bcp:main_block_pos_te_type")));
+    	public static void onBlockEntityRegistry(final RegistryEvent.Register<BlockEntityType<?>> teTypeRegistryEvent) {
+    		teTypeRegistryEvent.getRegistry().register(mainBlockPosBEType.setRegistryName(new ResourceLocation("bcp:main_block_pos_be")));
     	}
 
         @SubscribeEvent

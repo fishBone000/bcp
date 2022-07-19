@@ -1,29 +1,27 @@
 package group.sit.bcp.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.item.LeadItem;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.LeadItem;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 public class CustomSlopeFence extends Block {
 
@@ -34,7 +32,7 @@ public class CustomSlopeFence extends Block {
 	// TODO Check functions required to perform features of WATERLOGGED
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-	// An array of 16 VoxelShapes
+	// An array of 16 Shapes
 	// Index of each element can be obtained by ORing flags:
 	// 1:	North connected, low or horizontal
 	// 2:	West connected, low or horizontal
@@ -46,95 +44,93 @@ public class CustomSlopeFence extends Block {
 	// 128:	East connected, High
 	protected VoxelShape shapes[];
 
-	public CustomSlopeFence(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight, AbstractBlock.Properties properties) {
+	public CustomSlopeFence(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight, BlockBehaviour.Properties properties) {
 	//public CustomSlopeFence(AbstractBlock.Properties properties) {
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, 0).with(EAST, 0).with(SOUTH, 0).with(WEST, 0).with(WATERLOGGED, Boolean.valueOf(false)));
+		this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, 0).setValue(EAST, 0).setValue(SOUTH, 0).setValue(WEST, 0).setValue(WATERLOGGED, Boolean.valueOf(false)));
 		shapes = makeShapes(nodeWidth, extensionWidth, extensionHeight, extraHeight);
 		
 	}
 
 	protected VoxelShape[] makeShapes(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight) {
 		VoxelShape result[] = new VoxelShape[16];
-		VoxelShape node = Block.makeCuboidShape(8.0F-nodeWidth, 0F, 8.0F-nodeWidth, 8.0F+nodeWidth, extensionHeight, 8.0F+nodeWidth);
-		VoxelShape north = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 0F, 8.0F+extensionWidth, extensionHeight, 8.0F-nodeWidth);
-		VoxelShape west = Block.makeCuboidShape(0F, 0F, 8.0F-extensionWidth, 8.0F-nodeWidth, extensionHeight, 8.0F+extensionWidth);
-		VoxelShape south = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 8.0F+nodeWidth, 8.0F+extensionWidth, extensionHeight, 16.0F);
-		VoxelShape east = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-extensionWidth, 16.0F, extensionHeight, 8.0F+extensionWidth);
-		VoxelShape northHigh = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 0F, 8.0F+extensionWidth, extraHeight, 8.0F-nodeWidth);
-		VoxelShape westHigh = Block.makeCuboidShape(0F, 0F, 8.0F-extensionWidth, 8.0F-nodeWidth, extraHeight, 8.0F+extensionWidth);
-		VoxelShape southHigh = Block.makeCuboidShape(8.0F-extensionWidth, 0F, 8.0F+nodeWidth, 8.0F+extensionWidth, extraHeight, 16.0F);
-		VoxelShape eastHigh = Block.makeCuboidShape(8.0F+nodeWidth, 0F, 8.0F-extensionWidth, 16.0F, extraHeight, 8.0F+extensionWidth);
+		VoxelShape node = Block.box(8.0F-nodeWidth, 0F, 8.0F-nodeWidth, 8.0F+nodeWidth, extensionHeight, 8.0F+nodeWidth);
+		VoxelShape north = Block.box(8.0F-extensionWidth, 0F, 0F, 8.0F+extensionWidth, extensionHeight, 8.0F-nodeWidth);
+		VoxelShape west = Block.box(0F, 0F, 8.0F-extensionWidth, 8.0F-nodeWidth, extensionHeight, 8.0F+extensionWidth);
+		VoxelShape south = Block.box(8.0F-extensionWidth, 0F, 8.0F+nodeWidth, 8.0F+extensionWidth, extensionHeight, 16.0F);
+		VoxelShape east = Block.box(8.0F+nodeWidth, 0F, 8.0F-extensionWidth, 16.0F, extensionHeight, 8.0F+extensionWidth);
+		VoxelShape northHigh = Block.box(8.0F-extensionWidth, 0F, 0F, 8.0F+extensionWidth, extraHeight, 8.0F-nodeWidth);
+		VoxelShape westHigh = Block.box(0F, 0F, 8.0F-extensionWidth, 8.0F-nodeWidth, extraHeight, 8.0F+extensionWidth);
+		VoxelShape southHigh = Block.box(8.0F-extensionWidth, 0F, 8.0F+nodeWidth, 8.0F+extensionWidth, extraHeight, 16.0F);
+		VoxelShape eastHigh = Block.box(8.0F+nodeWidth, 0F, 8.0F-extensionWidth, 16.0F, extraHeight, 8.0F+extensionWidth);
 		for(int i = 0; i < 16; i++) {
 			result[i] = node;
 			if((i & 1) != 0)
-				result[i] = VoxelShapes.or(result[i], north);
+				result[i] = Shapes.or(result[i], north);
 			if((i & 2) != 0)
-				result[i] = VoxelShapes.or(result[i], west);
+				result[i] = Shapes.or(result[i], west);
 			if((i & 4) != 0)
-				result[i] = VoxelShapes.or(result[i], south);
+				result[i] = Shapes.or(result[i], south);
 			if((i & 8) != 0)
-				result[i] = VoxelShapes.or(result[i], east);
+				result[i] = Shapes.or(result[i], east);
 			if((i & 16) != 0)
-				result[i] = VoxelShapes.or(result[i], northHigh);
+				result[i] = Shapes.or(result[i], northHigh);
 			if((i & 32) != 0)
-				result[i] = VoxelShapes.or(result[i], westHigh);
+				result[i] = Shapes.or(result[i], westHigh);
 			if((i & 64) != 0)
-				result[i] = VoxelShapes.or(result[i], southHigh);
+				result[i] = Shapes.or(result[i], southHigh);
 			if((i & 128) != 0)
-				result[i] = VoxelShapes.or(result[i], eastHigh);
+				result[i] = Shapes.or(result[i], eastHigh);
 		}
 		return result;
 	}
 
-	private VoxelShape getShape(BlockState state) {
+	private VoxelShape getShape(BlockState pState) {
 		int flags = 0;
-		if(state.get(NORTH) != 0)
+		if(pState.getValue(NORTH) != 0)
 			flags += 1;
-		if(state.get(WEST) != 0)
+		if(pState.getValue(WEST) != 0)
 			flags += 2;
-		if(state.get(SOUTH) != 0)
+		if(pState.getValue(SOUTH) != 0)
 			flags += 4;
-		if(state.get(EAST) != 0)
+		if(pState.getValue(EAST) != 0)
 			flags += 8;
 		return shapes[flags];
 	}
 
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return getShape(state);
+	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+		return getShape(pState);
 	}
 
-   public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return getShape(state);
+   public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+		return getShape(pState);
    }
 
-	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return getShape(state);
+	public VoxelShape getRenderShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
+		return getShape(pState);
 	}
 
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if (worldIn.isRemote) {
-			ItemStack itemstack = player.getHeldItem(handIn);
-			return itemstack.getItem() == Items.LEAD ? ActionResultType.SUCCESS : ActionResultType.PASS;
-		} else {
-			return LeadItem.bindPlayerMobs(player, worldIn, pos);
-		}
+	// Just copy-pasted the code because I don't know how to solve:
+	// Cannot make static reference blahblahblah
+	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+		if (pLevel.isClientSide) {
+	         ItemStack itemstack = pPlayer.getItemInHand(pHand);
+	         return itemstack.is(Items.LEAD) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+	      } else {
+	         return LeadItem.bindPlayerMobs(pPlayer, pLevel, pPos);
+	      }
 	}
 
-   /*public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
-      return !state.get(WATERLOGGED);
+   /*public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+      return !state.getValue(WATERLOGGED);
    }
    */
 
-   public FluidState getFluidState(BlockState state) {
-      return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
-   }
-
-	public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
-		return false;
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(pState);
 	}
 
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(NORTH, EAST, WEST, SOUTH, WATERLOGGED);
+	public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
+		return false;
 	}
 }

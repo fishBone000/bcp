@@ -1,55 +1,54 @@
 package group.sit.bcp.block;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 public class HoleyFenceExtension extends HoleyFenceNode {
 	
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public HoleyFenceExtension(AbstractBlock.Properties properties) {
+	public HoleyFenceExtension(BlockBehaviour.Properties properties) {
 		super(0F, 1.0F, 16.0F, 25.0F, properties);
 	}
 	
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		LOGGER.debug(this.toString() + "'s isValidPosition is called at pos : " + pos.toString() + ", with state: " + state.toString());
-		return state.get(NORTH) != 0
-				|| state.get(WEST) != 0
-				|| state.get(SOUTH) != 0
-				|| state.get(EAST) != 0;
+	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+		LOGGER.debug(this.toString() + "'s canSurvive is called at pos : " + pPos.toString() + ", with state: " + pState.toString());
+		return pState.getValue(NORTH) != 0
+				|| pState.getValue(WEST) != 0
+				|| pState.getValue(SOUTH) != 0
+				|| pState.getValue(EAST) != 0;
 	}
 	
-	boolean hasNeighborNode(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		BlockPos [] neighborPos = {pos.north(), pos.west(), pos.south(), pos.east()};
-		DoubleBlockHalf half = state.get(HALF);
+	/* boolean hasNeighborNode(BlockState pState, IBlockGetterReader pLevel, BlockPos pPos) {
+		BlockPos [] neighborPos = {pPos.north(), pPos.west(), pPos.south(), pPos.east()};
+		DoubleBlockHalf half = pState.getValue(HALF);
 		for(BlockPos thisPos: neighborPos) {
-			if(worldIn.getBlockState(thisPos).getBlock() instanceof HoleyFenceNode)
-				if(worldIn.getBlockState(thisPos).get(HALF) == half)
+			if(pLevel.getBlockState(thisPos).getBlock() instanceof HoleyFenceNode)
+				if(pLevel.getBlockState(thisPos).getValue(HALF) == half)
 					return true;
 		}
 		return false;
-	}
+	} */
 	
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		LOGGER.debug(this.toString() + "'s updatePostPlacement is called at pos : " + currentPos.toString());
-		BlockState state = super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
+		LOGGER.debug(this.toString() + "'s updateShape is called at pos : " + pCurrentPos.toString());
+		BlockState state = super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
 		if(state.getBlock() instanceof HoleyFenceNode) {
-			if(state.get(NORTH) != 0
-					|| state.get(WEST) != 0
-					|| state.get(SOUTH) != 0
-					|| state.get(EAST) != 0
+			if(state.getValue(NORTH) != 0
+					|| state.getValue(WEST) != 0
+					|| state.getValue(SOUTH) != 0
+					|| state.getValue(EAST) != 0
 			)
 				return state;
 		}
-		return Blocks.AIR.getDefaultState();
+		return Blocks.AIR.defaultBlockState();
 	}
 }

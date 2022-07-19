@@ -1,58 +1,54 @@
 package group.sit.bcp.block;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.DoorHingeSide;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-
-import java.util.function.Supplier;
-
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import com.mojang.logging.LogUtils;
 
-import com.mojang.authlib.properties.Property;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 
 public class DoubleSizeDoor extends Block{
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-	protected static final VoxelShape SOUTH_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 6.0D);
-	protected static final VoxelShape NORTH_AABB = Block.makeCuboidShape(0.0D, 0.0D, 10.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape WEST_AABB = Block.makeCuboidShape(10.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape EAST_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 6.0D, 16.0D, 16.0D);
+	protected static final VoxelShape SOUTH_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 6.0D);
+	protected static final VoxelShape NORTH_AABB = Block.box(0.0D, 0.0D, 10.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape WEST_AABB = Block.box(10.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape EAST_AABB = Block.box(0.0D, 0.0D, 0.0D, 6.0D, 16.0D, 16.0D);
 	public static final IntegerProperty PART = IntegerProperty.create("part", 0, 7);
 	/*
 	 *   ___________
@@ -70,10 +66,10 @@ public class DoubleSizeDoor extends Block{
 	 *   -----------
 	 */
 
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		Direction direction = state.get(FACING);
-		boolean flag = !state.get(OPEN);
-		boolean flag1 = state.get(HINGE) == DoorHingeSide.RIGHT;
+	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+		Direction direction = pState.getValue(FACING);
+		boolean flag = !pState.getValue(OPEN);
+		boolean flag1 = pState.getValue(HINGE) == DoorHingeSide.RIGHT;
 		switch(direction) {
 			case EAST:
 			default:
@@ -87,95 +83,61 @@ public class DoubleSizeDoor extends Block{
 		}
 	}
 
-	public DoubleSizeDoor(AbstractBlock.Properties builder) {
+	public DoubleSizeDoor(BlockBehaviour.Properties builder) {
 		super(builder);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(OPEN, Boolean.valueOf(false)).with(HINGE, DoorHingeSide.LEFT).with(POWERED, Boolean.valueOf(false)).with(PART, 3));
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, Boolean.valueOf(false)).setValue(HINGE, DoorHingeSide.LEFT).setValue(POWERED, Boolean.valueOf(false)).setValue(PART, 3));
 	}
 
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(PART, FACING, OPEN, HINGE, POWERED);
-	}
-
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		Direction direction = getDirection(state);
-		BlockPos iPos = pos.up();
+	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+		Direction direction = getDirection(pState);
+		BlockPos iPos = pPos.above();
 		for(int i = 2; i >= 0; i--) {
-			worldIn.setBlockState(iPos, state.with(PART, i));
-			iPos = iPos.up();
+			pLevel.setBlock(iPos, pState.setValue(PART, i), 3);
+			iPos = iPos.above();
 		}
-		iPos = iPos.down().offset(direction);
+		iPos = iPos.below().relative(direction);
 		for(int i = 4; i < 8; i++) {
-			worldIn.setBlockState(iPos, state.with(PART, i));
-			iPos = iPos.down();
+			pLevel.setBlock(iPos, pState.setValue(PART, i), 3);
+			iPos = iPos.below();
 		}
 	}
 
-	private Direction clockwiseAQuater(Direction direction) {
-			switch(direction) {
-			case NORTH:
-				return Direction.EAST;
-			case EAST:
-				return Direction.SOUTH;
-			case SOUTH:
-				return Direction.WEST;
-			case WEST:
-				return Direction.NORTH;
-			default:
-				return direction;
-		}
-	}
+	private boolean isDoorBlocked(BlockGetter blockgetter, BlockState pState, BlockPos pPos) {
 
-	private Direction counterClockwiseAQuater(Direction direction) {
-			switch(direction) {
-			case NORTH:
-				return Direction.WEST;
-			case EAST:
-				return Direction.NORTH;
-			case SOUTH:
-				return Direction.EAST;
-			case WEST:
-				return Direction.SOUTH;
-			default:
-				return direction;
-		}
-	}
+		if(!(pState.getBlock() instanceof DoubleSizeDoor))
+			throw new RuntimeException("BlockState "+pState.toString()+"at pos "+pPos.toString()+" is not instance of DoubleSizeDoor. This shouldn't happen!");
 
-	private boolean isDoorBlocked(IWorld world, BlockState state, BlockPos pos) {
-
-		if(!(state.getBlock() instanceof DoubleSizeDoor))
-			throw new RuntimeException("BlockState "+state.toString()+"at pos "+pos.toString()+" is not instance of DoubleSizeDoor. This shouldn't happen!");
-
-		final int part = state.get(PART);
-		final Direction direction = getDirection(state);
-		if(state.get(OPEN)) {
+		final int part = pState.getValue(PART);
+		final Direction direction = getDirection(pState);
+		if(pState.getValue(OPEN)) {
 			if(part < 4)
-				pos = pos.offset(direction);
-			pos = pos.offset( state.get(HINGE) == DoorHingeSide.LEFT ? direction.rotateY() : direction.rotateYCCW() );
+				pPos = pPos.relative(direction);
+			pPos = pPos.relative( (pState.getValue(HINGE) == DoorHingeSide.LEFT ? direction.getClockWise() : direction.getCounterClockWise()) );
 		} else {
 			if(part < 4)
-				pos = pos.offset(direction);
-			pos = pos.offset(state.get(FACING));
+				pPos = pPos.relative(direction);
+			pPos = pPos.relative(pState.getValue(FACING));
 		}
-		pos = pos.up(part%4);
+		pPos = pPos.above(part%4);
 
 		for(int j = 0; j < 2; j++) {
 			for(int i = 0; i < 4; i++) {
-				if(!world.getBlockState(pos).isIn(Blocks.AIR))
+				if(!blockgetter.getBlockState(pPos).is(Blocks.AIR))
 					return true;
-				pos = pos.down();
+				pPos = pPos.below();
 			}
-			pos = pos.up(4).offset(direction.getOpposite());
+			pPos = pPos.above(4).relative(direction.getOpposite());
 		}
 		return false;
 
 	}
 
-	private Direction getDirection(BlockState state) {
-		if(state.get(OPEN))
-			return state.get(FACING);
+	private Direction getDirection(BlockState pState) {
+		if(pState.getValue(OPEN))
+			return pState.getValue(FACING);
 		else {
-			boolean flag = state.get(HINGE) == DoorHingeSide.RIGHT;
-			switch(state.get(FACING)) {
+			boolean flag = pState.getValue(HINGE) == DoorHingeSide.RIGHT;
+			switch(pState.getValue(FACING)) {
 				case NORTH:
 					return flag ? Direction.WEST : Direction.EAST;
 				case WEST:
@@ -185,112 +147,113 @@ public class DoubleSizeDoor extends Block{
 				case EAST:
 					return flag ? Direction.NORTH : Direction.SOUTH;
 				default:
-					throw new RuntimeException("Facing is not horizontal. This shouldn't happen! " + state.toString());
+					throw new RuntimeException("Facing is not horizontal. This shouldn't happen! " + pState.toString());
 			}
 		}
 		
 	}
 
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		Direction direction = getDirection(state);
-		final int part = state.get(PART);
-		pos = pos.up(part % 4);
+	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+		Direction direction = getDirection(pState);
+		final int part = pState.getValue(PART);
+		pPos = pPos.above(part % 4);
 		if(part > 3)
-			pos = pos.offset(direction.getOpposite());
+			pPos = pPos.relative(direction.getOpposite());
 
 		for(int i = 0; i < 8; i++) {
-			BlockState iState = worldIn.getBlockState(pos);
-			if(!iState.isIn(Blocks.AIR))
+			BlockState iState = pLevel.getBlockState(pPos);
+			if(!iState.is(Blocks.AIR))
 				return false;
 
-			pos = i == 3 ? pos.offset(direction).up(3) : pos.down();
+			pPos = i == 3 ? pPos.relative(direction).above(3) : pPos.below();
 		}
 		return true;
 	}
 
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player player, InteractionHand handIn, BlockHitResult hit) {
 
-		if(isDoorBlocked(worldIn, state, pos))
-			return ActionResultType.PASS;
+		if(isDoorBlocked(pLevel, pState, pPos))
+			return InteractionResult.PASS;
 
 		BlockPos iPos;
-		if(state.get(PART) > 3)
-			iPos = pos.offset(getDirection(state).getOpposite());
-		else iPos = pos;
-		iPos = iPos.up(state.get(PART) % 4);
+		if(pState.getValue(PART) > 3)
+			iPos = pPos.relative(getDirection(pState).getOpposite());
+		else iPos = pPos;
+		iPos = iPos.above(pState.getValue(PART) % 4);
 		LOGGER.debug("iPos set" + iPos.toString());
 
 		Direction direction = Direction.NORTH;
 		boolean flag = true;
 		for(int i = 0; i < 4; i++) {
 			LOGGER.debug(iPos.toString());
-			BlockState iState = worldIn.getBlockState(iPos);
+			BlockState iState = pLevel.getBlockState(iPos);
 			if(iState.getBlock() instanceof DoubleSizeDoor) {
-				BlockPos sidePos = iPos.offset(getDirection(iState));
-				BlockState sideState = worldIn.getBlockState(sidePos);
+				BlockPos sidePos = iPos.relative(getDirection(iState));
+				BlockState sideState = pLevel.getBlockState(sidePos);
 				direction = getDirection(iState);
-				if(sideState.isIn(state.getBlock()))
-					if(getDirection(sideState) == direction && sideState.get(PART) == i+4)
-						worldIn.setBlockState(sidePos, Blocks.AIR.getDefaultState());
+				if(sideState.is(pState.getBlock()))
+					if(getDirection(sideState) == direction && sideState.getValue(PART) == i+4)
+						pLevel.setBlock(sidePos, Blocks.AIR.defaultBlockState(), 3);
 
-				iState = worldIn.getBlockState(iPos).func_235896_a_(OPEN);
+				iState = pLevel.getBlockState(iPos).cycle(OPEN);
 				LOGGER.debug(iState.toString());
-				worldIn.setBlockState(iPos, iState);
+				pLevel.setBlock(iPos, iState, 3);
 				direction = getDirection(iState);
 				flag = false;
 			}else LOGGER.debug("Block is not instanceof DoubleSizeDoor. " + iState.toString());
-			iPos = iPos.down();
+			iPos = iPos.below();
 		}
 		if(flag)
-			return ActionResultType.func_233537_a_(worldIn.isRemote);
+			return InteractionResult.sidedSuccess(pLevel.isClientSide);
 
-		iPos = iPos.up(4).offset(direction);
+		iPos = iPos.above(4).relative(direction);
 		for(int i = 0; i < 4; i++) {
-			if(worldIn.getBlockState(iPos).isIn(Blocks.AIR)) {
-				BlockPos hingePos = iPos.offset(direction.getOpposite());
-				BlockState hingeState = worldIn.getBlockState(hingePos);
-				if(hingeState.isIn(this))
+			if(pLevel.getBlockState(iPos).is(Blocks.AIR)) {
+				BlockPos hingePos = iPos.relative(direction.getOpposite());
+				BlockState hingeState = pLevel.getBlockState(hingePos);
+				if(hingeState.is(this))
 					if(getDirection(hingeState) == direction)
-						worldIn.setBlockState(iPos, hingeState.with(PART, 4+i));
+						pLevel.setBlock(iPos, hingeState.setValue(PART, 4+i), 3);
 					else LOGGER.debug("Invalid hinge block direction at: " + hingePos);
 				else LOGGER.debug("Missing hinge block at: " + hingePos);
 			}
-			iPos = iPos.down();
+			iPos = iPos.below();
 		}
 
-		worldIn.playEvent(player, state.get(OPEN) ? 1006 : 1012, pos, 0);
-		return ActionResultType.func_233537_a_(worldIn.isRemote);
+		pLevel.levelEvent(player, pState.getValue(OPEN) ? 1006 : 1012, pPos, 0);
+		pLevel.gameEvent(player, pState.getValue(OPEN) ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pPos);
+		return InteractionResult.sidedSuccess(pLevel.isClientSide);
 	}
 
-	private DoorHingeSide getHingeSide(BlockItemUseContext context) {
-		IBlockReader iblockreader = context.getWorld();
-		BlockPos blockpos = context.getPos();
-		Direction direction = context.getPlacementHorizontalFacing();
-		Direction direction1 = direction.rotateYCCW();
-		BlockPos blockpos2 = blockpos.offset(direction1);
-		BlockState blockstate = iblockreader.getBlockState(blockpos2);
-		Direction direction2 = direction.rotateY();
-		BlockPos blockpos4 = blockpos.offset(direction2);
-		BlockState blockstate2 = iblockreader.getBlockState(blockpos4);
+	private DoorHingeSide getHingeSide(BlockPlaceContext pContext) {
+		BlockGetter blockgetter = pContext.getLevel();
+		BlockPos blockpos = pContext.getClickedPos();
+		Direction direction = pContext.getHorizontalDirection();
+		Direction direction1 = direction.getCounterClockWise();
+		BlockPos blockpos2 = blockpos.relative(direction1);
+		BlockState blockstate = blockgetter.getBlockState(blockpos2);
+		Direction direction2 = direction.getClockWise();
+		BlockPos blockpos4 = blockpos.relative(direction2);
+		BlockState blockstate2 = blockgetter.getBlockState(blockpos4);
 
 		int i = 0;
-		BlockPos iPos = blockpos.offset(direction1);
+		BlockPos iPos = blockpos.relative(direction1);
 		for(int j = -1; j < 2; j+=2) {
 			for(int k = 0; k < 4; k++) {
-				if(iblockreader.getBlockState(iPos).hasOpaqueCollisionShape(iblockreader, iPos))
+				if(blockgetter.getBlockState(iPos).isCollisionShapeFullBlock(blockgetter, iPos))
 					i+=j;
-				iPos = iPos.up();
+				iPos = iPos.above();
 			}
-			iPos = iPos.offset(direction2, 2).down(4);
+			iPos = iPos.relative(direction2).relative(direction2).below(4);
 		}
-		//boolean flag = blockstate.isIn(this) && blockstate.get(HALF) == DoubleBlockHalf.LOWER;
-		boolean flag = blockstate.isIn(this) && blockstate.get(PART)%4 == 3;
-		boolean flag1 = blockstate2.isIn(this) && blockstate2.get(PART)%4 == 3;
+		//boolean flag = blockstate.is(this) && blockstate.getValue(HALF) == DoubleBlockHalf.LOWER;
+		boolean flag = blockstate.is(this) && blockstate.getValue(PART)%4 == 3;
+		boolean flag1 = blockstate2.is(this) && blockstate2.getValue(PART)%4 == 3;
 		if ((!flag || flag1) && i <= 0) {
 			if ((!flag1 || flag) && i >= 0) {
-			int j = direction.getXOffset();
-			int k = direction.getZOffset();
-			Vector3d vector3d = context.getHitVec();
+			int j = direction.getStepX();
+			int k = direction.getStepZ();
+			Vec3 vector3d = pContext.getClickLocation();
 			double d0 = vector3d.x - (double)blockpos.getX();
 			double d1 = vector3d.z - (double)blockpos.getZ();
 			return (j >= 0 || !(d1 < 0.5D)) && (j <= 0 || !(d1 > 0.5D)) && (k >= 0 || !(d0 > 0.5D)) && (k <= 0 || !(d0 < 0.5D)) ? DoorHingeSide.LEFT : DoorHingeSide.RIGHT;
@@ -303,96 +266,96 @@ public class DoubleSizeDoor extends Block{
 	}
 
 	@Nullable
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockPos blockpos = context.getPos();
-		boolean flag = context.getWorld().getBlockState(blockpos.up()).isReplaceable(context) &&
-					context.getWorld().getBlockState(blockpos.up(2)).isReplaceable(context) &&
-					context.getWorld().getBlockState(blockpos.up(3)).isReplaceable(context);
+	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+		BlockPos blockpos = pContext.getClickedPos();
+		boolean flag = pContext.getLevel().getBlockState(blockpos.above()).canBeReplaced(pContext) &&
+					pContext.getLevel().getBlockState(blockpos.above(2)).canBeReplaced(pContext) &&
+					pContext.getLevel().getBlockState(blockpos.above(3)).canBeReplaced(pContext);
 		if (blockpos.getY() < 253 && flag) {
-			World world = context.getWorld();
-			flag = world.isBlockPowered(blockpos) || 
-				world.isBlockPowered(blockpos.up()) ||
-				world.isBlockPowered(blockpos.up(2)) ||
-				world.isBlockPowered(blockpos.up(3));
-			return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing()).with(HINGE, this.getHingeSide(context)).with(POWERED, Boolean.valueOf(flag)).with(OPEN, Boolean.valueOf(flag)).with(PART, 3);
+			Level level = pContext.getLevel();
+			flag = level.hasNeighborSignal(blockpos) || 
+				level.hasNeighborSignal(blockpos.above()) ||
+				level.hasNeighborSignal(blockpos.above(2)) ||
+				level.hasNeighborSignal(blockpos.above(3));
+			return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection()).setValue(HINGE, this.getHingeSide(pContext)).setValue(POWERED, Boolean.valueOf(flag)).setValue(OPEN, Boolean.valueOf(flag)).setValue(PART, 3);
 		} else {
 			return null;
 		}
 	}
 
-	private void destroy(IWorld worldIn, BlockPos pos, BlockState state) {
-		if(!(state.getBlock() instanceof DoubleSizeDoor))
-			throw new RuntimeException("BlockState " + state.toString() + " at pos " + pos.toString() + "is not instance of DoubleSizeDoor, this shouldn't happen!");
+	private void destroy(Level pLevel, BlockPos pPos, BlockState pState) {
+		if(!(pState.getBlock() instanceof DoubleSizeDoor))
+			throw new RuntimeException("BlockState " + pState.toString() + " at pos " + pPos.toString() + "is not instance of DoubleSizeDoor, this shouldn't happen!");
 
-		Direction direction = getDirection(state);
-		final int part = state.get(PART);
-		pos = pos.up(part % 4);
+		Direction direction = getDirection(pState);
+		final int part = pState.getValue(PART);
+		pPos = pPos.above(part % 4);
 		if(part > 3)
-			pos = pos.offset(direction.getOpposite());
+			pPos = pPos.relative(direction.getOpposite());
 
 		for(int i = 0; i < 8; i++) {
-			BlockState iState = worldIn.getBlockState(pos);
-			if(iState.isIn(state.getBlock())) {
-				if(	iState.get(PART) == i && 
-					iState.get(OPEN) == state.get(OPEN) &&
-					iState.get(HINGE) == state.get(HINGE) &&
-					iState.get(FACING) == state.get(FACING) &&
-					iState.get(POWERED) == state.get(POWERED)
+			BlockState iState = pLevel.getBlockState(pPos);
+			if(iState.is(pState.getBlock())) {
+				if(	iState.getValue(PART) == i && 
+					iState.getValue(OPEN) == pState.getValue(OPEN) &&
+					iState.getValue(HINGE) == pState.getValue(HINGE) &&
+					iState.getValue(FACING) == pState.getValue(FACING) &&
+					iState.getValue(POWERED) == pState.getValue(POWERED)
 				) {
-					worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+					pLevel.setBlock(pPos, Blocks.AIR.defaultBlockState(), 3);
 				}
 			}
 
-			pos = i == 3 ? pos.offset(direction).up(3) : pos.down();
+			pPos = i == 3 ? pPos.relative(direction).above(3) : pPos.below();
 		}
 	}
 
-	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-		destroy(worldIn, pos, state);
+	public void playerDestroy(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState, @Nullable BlockEntity pBlockEntity, ItemStack pTool) {
+		destroy(pLevel, pPos, pState);
 	}
 
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		final int part = stateIn.get(PART);
+	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
+		final int part = pState.getValue(PART);
 		switch(part) {
 			case 3:
 			case 7:
-				if(facing == Direction.DOWN && !facingState.isSolidSide(worldIn, facingPos, Direction.UP)) {
-					destroy(worldIn, currentPos, stateIn);
-					return Blocks.AIR.getDefaultState();
+				if(pDirection == Direction.DOWN && !pNeighborState.isFaceSturdy(pLevel, pNeighborPos, Direction.UP)) {
+					destroy(pLevel, pCurrentPos, pState);
+					return Blocks.AIR.defaultBlockState();
 				}
 			default:
-				if(!facingState.isIn(stateIn.getBlock())) {
-					if(facingState.isIn(Blocks.AIR))
-						return stateIn;
-					switch(facing) {
+				if(!pNeighborState.is(pState.getBlock())) {
+					if(pNeighborState.is(Blocks.AIR))
+						return pState;
+					switch(pDirection) {
 						case UP:
 							if(part != 0 && part != 4)
-								destroy(worldIn, currentPos, stateIn);
+								destroy(pLevel, pCurrentPos, pState);
 							break;
 						case DOWN:
 							if(part != 3 && part != 7)
-								destroy(worldIn, currentPos, stateIn);
+								destroy(pLevel, pCurrentPos, pState);
 							break;
 						default:
-							if(facing == getDirection(stateIn)) {
+							if(pDirection == getDirection(pState)) {
 								if(part==0 || part==1 || part==2 || part==3)
-									destroy(worldIn, currentPos, stateIn);
-							}else if(facing == getDirection(stateIn).getOpposite()) {
+									destroy(pLevel, pCurrentPos, pState);
+							}else if(pDirection == getDirection(pState).getOpposite()) {
 								if(part==4 || part==5 || part==6 || part==7)
-									destroy(worldIn, currentPos, stateIn);
-							}else return stateIn;
+									destroy(pLevel, pCurrentPos, pState);
+							}else return pState;
 					}
-					return Blocks.AIR.getDefaultState();
+					return Blocks.AIR.defaultBlockState();
 				}
-				if(part < 4) // If the facing block is the same block as stateIn, in this situation, none of my business.
+				if(part < 4) // If the facing block is the same block as pState, in this situation, none of my business.
 							 // But...what if it's a power change? TODO
-					return stateIn;
-				Direction direction = getDirection(stateIn);
-				if(direction == facing.getOpposite())
-					if(getDirection(facingState) == direction)
-						return facingState.with(PART, part);
-					else return Blocks.AIR.getDefaultState();
-				return stateIn;
+					return pState;
+				Direction direction = getDirection(pState);
+				if(direction == pDirection.getOpposite())
+					if(getDirection(pNeighborState) == direction)
+						return pNeighborState.setValue(PART, part);
+					else return Blocks.AIR.defaultBlockState();
+				return pState;
 		}
 	}
 

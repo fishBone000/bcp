@@ -1,73 +1,64 @@
 package group.sit.bcp.block;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 public class StackTraceBlock extends Block {
 	public static final BooleanProperty BOOL = BooleanProperty.create("bool");
 
-	//private static final Logger LOGGER = LogManager.getLogger();
+	// private static final Logger LOGGER = LogUtils.getLogger();
 	public StackTraceBlock() {
-		super(AbstractBlock.Properties
-			.create(Material.ROCK)
-    		.hardnessAndResistance(2.0F, 6.0F)
-    		.setRequiresTool()
+		super(BlockBehaviour.Properties
+			.of(Material.STONE)
+    		.strength(2.0F, 6.0F)
+    		.requiresCorrectToolForDrops()
     	);
 		Thread.dumpStack();
 	}
 
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
 		Thread.dumpStack();
-		return super.getStateForPlacement(context);
+		return super.getStateForPlacement(pContext);
 	}
 
 	@Override
-	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+	public void playerDestroy(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState, @Nullable BlockEntity pBlockEntity, ItemStack pTool) {
 		Thread.dumpStack();
-		super.onPlayerDestroy(worldIn, pos, state);
+		super.playerDestroy(pLevel, pPlayer, pPos, pState, pBlockEntity, pTool);
 	}
 
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
 		Thread.dumpStack();
-		return super.isValidPosition(state, worldIn, pos);
+		return super.canSurvive(pState, pLevel, pPos);
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
 		Thread.dumpStack();
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
 	}
 
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
 		Thread.dumpStack();
-		return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+		return super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
 	}
 
-	@Override
-	public void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(BOOL);
-	}
 }

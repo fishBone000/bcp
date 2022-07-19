@@ -5,26 +5,29 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.CrossCollisionBlock;
 
 public class HoleyFenceNode extends CustomSlopeFence {
 	private Logger LOGGER = LogManager.getLogger();
@@ -41,78 +44,77 @@ public class HoleyFenceNode extends CustomSlopeFence {
 	public static final IntegerProperty WEST = IntegerProperty.create("west", 0, 3);
 	public static final IntegerProperty SOUTH = IntegerProperty.create("south", 0, 3);
 	public static final IntegerProperty EAST = IntegerProperty.create("east", 0, 3);
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
-	public HoleyFenceNode(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight, AbstractBlock.Properties properties) {
+	public HoleyFenceNode(float nodeWidth, float extensionWidth, float extensionHeight, float extraHeight, BlockBehaviour.Properties properties) {
 		super(nodeWidth, extensionWidth, extensionHeight, extraHeight, properties);
-		this.setDefaultState(this.stateContainer.getBaseState()
-				.with(NORTH, 0)
-				.with(SOUTH, 0)
-				.with(WEST, 0)
-				.with(EAST, 0)
-				.with(WATERLOGGED, false)
-				.with(HALF, DoubleBlockHalf.LOWER));
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(NORTH, 0)
+				.setValue(SOUTH, 0)
+				.setValue(WEST, 0)
+				.setValue(EAST, 0)
+				.setValue(WATERLOGGED, false)
+				.setValue(HALF, DoubleBlockHalf.LOWER));
 	}
 	
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		boolean result = worldIn.getBlockState(pos.up()).isIn(Blocks.AIR);
-		LOGGER.debug("HoleyFenceNode#isValidPosition is called at " + pos.toString() + " with result of " + result);
+	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+		boolean result = pLevel.getBlockState(pPos.above()).is(Blocks.AIR);
+		LOGGER.debug("HoleyFenceNode#canSurvive called at " + pPos.toString() + " with result of " + result);
 		return result;
 	}
 	
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		World world = context.getWorld();
-		IBlockReader iblockreader = world;
-		BlockPos blockpos = context.getPos();
+	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+		BlockGetter blockgetter = pContext.getLevel();
+		BlockPos blockpos = pContext.getClickedPos();
 		LOGGER.debug("HoleyFenceNode#getStateForPlacement is called at " + blockpos.toString());
-		FluidState fluidstate = context.getWorld().getFluidState(context.getPos());
-		return this.getDefaultState()
-				.with(NORTH, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.NORTH)))
-				.with(EAST, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.EAST)))
-				.with(SOUTH, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.SOUTH)))
-				.with(WEST, Integer.valueOf(connectResult(iblockreader, DoubleBlockHalf.LOWER, blockpos, Direction.WEST)))
-				.with(HALF, DoubleBlockHalf.LOWER)
-				.with(WATERLOGGED, Boolean.valueOf(fluidstate.getFluid() == Fluids.WATER));
+		FluidState fluidstate = pContext.getLevel().getFluidState(pContext.getClickedPos());
+		return this.defaultBlockState()
+				.setValue(NORTH, Integer.valueOf(connectResult(blockgetter, DoubleBlockHalf.LOWER, blockpos, Direction.NORTH)))
+				.setValue(EAST, Integer.valueOf(connectResult(blockgetter, DoubleBlockHalf.LOWER, blockpos, Direction.EAST)))
+				.setValue(SOUTH, Integer.valueOf(connectResult(blockgetter, DoubleBlockHalf.LOWER, blockpos, Direction.SOUTH)))
+				.setValue(WEST, Integer.valueOf(connectResult(blockgetter, DoubleBlockHalf.LOWER, blockpos, Direction.WEST)))
+				.setValue(HALF, DoubleBlockHalf.LOWER)
+				.setValue(WATERLOGGED, Boolean.valueOf(fluidstate.getType() == Fluids.WATER));
 	}
 	
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		LOGGER.debug("onBlockPlacedBy is called at " + pos.toString() + " with HALF: " + state.get(HALF).toString());
-		worldIn.setBlockState(pos.up(), state.with(HALF, DoubleBlockHalf.UPPER), 2);
+	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, LivingEntity pPlacer, ItemStack pStack) {
+		LOGGER.debug("setPlacedBy is called at " + pPos.toString() + " with HALF: " + pState.getValue(HALF).toString());
+		pLevel.setBlock(pPos.above(), pState.setValue(HALF, DoubleBlockHalf.UPPER), 2);
 	}
 	
-	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-		LOGGER.debug("onPlayerDestroy is called at " + pos.toString());
-		worldIn.setBlockState(state.get(HALF) == DoubleBlockHalf.UPPER?pos.down():pos.up(), Blocks.AIR.getDefaultState(), 3);
+	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+		LOGGER.debug("playerWillDestroy is called at " + pPos.toString());
+		pLevel.setBlock(pState.getValue(HALF) == DoubleBlockHalf.UPPER?pPos.below():pPos.above(), Blocks.AIR.defaultBlockState(), 3);
 	}
 	
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		LOGGER.debug("updatePostPlacement is called at " + currentPos.toString() + ", facingPos: " + facingPos.toString());
+	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
+		LOGGER.debug("updateShape is called at " + pCurrentPos.toString() + ", pNeighborPos: " + pNeighborPos.toString());
 		
-		if (stateIn.get(WATERLOGGED)) {
-			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+		if (pState.getValue(WATERLOGGED)) {
+		 pLevel.scheduleTick(pCurrentPos, Fluids.WATER, Fluids.WATER.getTickDelay(pLevel));
 		}
-		
 
-		if(facing.getAxis().isVertical()) {
-			if(		(facing == Direction.UP && stateIn.get(HALF) == DoubleBlockHalf.LOWER 
-				||	facing == Direction.DOWN && stateIn.get(HALF) == DoubleBlockHalf.UPPER)
-				&&	!worldIn.getBlockState(facingPos).isIn(stateIn.getBlock()))
-				return Blocks.AIR.getDefaultState();
+		if(pDirection.getAxis().isVertical()) {
+			if(		(pDirection == Direction.UP && pState.getValue(HALF) == DoubleBlockHalf.LOWER 
+				||	pDirection == Direction.DOWN && pState.getValue(HALF) == DoubleBlockHalf.UPPER)
+				&&	!pLevel.getBlockState(pNeighborPos).is(pState.getBlock()))
+				return Blocks.AIR.defaultBlockState();
 			else
-				return stateIn;
+				return pState;
 		}
 
-		stateIn = stateIn.with(facingToProperty(facing), Integer.valueOf(
-						connectResult(worldIn, stateIn.get(HALF), currentPos, facing)
+		pState = pState.setValue(facingToProperty(pDirection), Integer.valueOf(
+						connectResult(pLevel, pState.getValue(HALF), pCurrentPos, pDirection)
 				));
-		if(stateIn.get(HALF) == DoubleBlockHalf.UPPER)
-			worldIn.setBlockState(currentPos.down(), stateIn.with(HALF, DoubleBlockHalf.LOWER), 18);
+		if(pState.getValue(HALF) == DoubleBlockHalf.UPPER)
+			pLevel.setBlock(pCurrentPos.below(), pState.setValue(HALF, DoubleBlockHalf.LOWER), 18);
 		else
-			worldIn.setBlockState(currentPos.up(), stateIn.with(HALF, DoubleBlockHalf.UPPER), 18);
-		return stateIn;
+			pLevel.setBlock(pCurrentPos.above(), pState.setValue(HALF, DoubleBlockHalf.UPPER), 18);
+		return pState;
 	}
 
-	private IntegerProperty facingToProperty(Direction facing) {
-		switch(facing) {
+	private IntegerProperty facingToProperty(Direction pDirection) {
+		switch(pDirection) {
 			case NORTH:
 				return NORTH;
 			case WEST:
@@ -122,27 +124,27 @@ public class HoleyFenceNode extends CustomSlopeFence {
 			case EAST:
 				return EAST;
 			default:
-				throw new RuntimeException("A Direction class argument with value " + facing.toString() + " has passed to HoleyFenceNode#facingToProperty. This shouldn't happen!");
+				throw new RuntimeException("A Direction class argument with value " + pDirection.toString() + " has passed to HoleyFenceNode#facingToProperty. This shouldn't happen!");
 		}
 	}
 	
-	protected int connectResult(IBlockReader blockReaderIn, Enum<DoubleBlockHalf> thisHalf, BlockPos thisPos, Direction direction) {
+	protected int connectResult(BlockGetter blockReaderIn, Enum<DoubleBlockHalf> thisHalf, BlockPos thisPos, Direction direction) {
 		int result;
-		BlockPos pos = thisPos.offset(direction).up(2);
-		BlockState state = Blocks.AIR.getDefaultState();
+		BlockPos pos = thisPos.relative(direction).above(2);
+		BlockState state = Blocks.AIR.defaultBlockState();
 		for(result = 3; result > 0; result--) {
-			pos = pos.down();
+			pos = pos.below();
 			state = blockReaderIn.getBlockState(pos);
 			if(state.getBlock() instanceof HoleyFenceNode) {
-				Enum<DoubleBlockHalf> half = state.get(HALF);
+				Enum<DoubleBlockHalf> half = state.getValue(HALF);
 				Enum<DoubleBlockHalf> opHalf = half == DoubleBlockHalf.UPPER?DoubleBlockHalf.LOWER:DoubleBlockHalf.UPPER;
 				if(half == thisHalf) {
-					BlockPos pos1 = half == DoubleBlockHalf.UPPER?pos.down():pos.up();
+					BlockPos pos1 = half == DoubleBlockHalf.UPPER?pos.below():pos.above();
 					LOGGER.debug("connectResult: pos1: " + pos1.toString());
 					BlockState state1 = blockReaderIn.getBlockState(pos1);
 					LOGGER.debug("connectResult: state: " + state1.toString());
 					if(state1.getBlock() instanceof HoleyFenceNode)
-						if(state1.get(HALF) == opHalf)
+						if(state1.getValue(HALF) == opHalf)
 							break;
 				}
 			}
@@ -152,22 +154,18 @@ public class HoleyFenceNode extends CustomSlopeFence {
 			return result;
 		}
 
-		state = blockReaderIn.getBlockState(thisPos.offset(direction));
-		pos = thisPos.offset(direction);
-		if( !cannotAttach(state.getBlock()) 
-			&& state.isSolidSide(blockReaderIn, pos, direction.getOpposite())
+		state = blockReaderIn.getBlockState(thisPos.relative(direction));
+		pos = thisPos.relative(direction);
+		if( !isExceptionForConnection(state)
+			&& state.isFaceSturdy(blockReaderIn, pos, direction.getOpposite())
 			&&  (
 					thisHalf == DoubleBlockHalf.UPPER?
-					blockReaderIn.getBlockState(pos.down()).isSolidSide(blockReaderIn, pos.down(), direction.getOpposite())
-					:blockReaderIn.getBlockState(pos.up()).isSolidSide(blockReaderIn, pos.up(), direction.getOpposite())
+					blockReaderIn.getBlockState(pos.below()).isFaceSturdy(blockReaderIn, pos.below(), direction.getOpposite())
+					:blockReaderIn.getBlockState(pos.above()).isFaceSturdy(blockReaderIn, pos.above(), direction.getOpposite())
 				)
 		)
 			result = 2;
 		LOGGER.debug("HoleyFenceNode#connectResult is called at " + thisPos.toString() + ", state: " + state.toString() + ", with result of" + result);
 		return result;
-	}
-	
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(NORTH, EAST, WEST, SOUTH, WATERLOGGED, HALF);
 	}
 }
