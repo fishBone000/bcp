@@ -1,6 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model": "bcp:block/empty" } },
 		{"when": { "part": 1, "facing": "north", "hinge": "left", "open": false}, "apply": {"model": "bcp:block/double_size_door_part_1", "y": 0}},
 		{"when": { "part": 1, "facing": "north", "hinge": "left", "open": true}, "apply": {"model": "bcp:block/double_size_door_part_1_hinge", "y": 90}},
 		{"when": { "part": 1, "facing": "north", "hinge": "right", "open": false}, "apply": {"model": "bcp:block/double_size_door_part_1_hinge", "y": 0}},
@@ -79,6 +78,8 @@
 		{"when": { "part": 7, "facing": "west", "hinge": "left", "open": false}, "apply": {"model": "bcp:block/double_size_door_part_7", "y": 270}},
 		{"when": { "part": 7, "facing": "west", "hinge": "left", "open": true}, "apply": {"model": "bcp:block/double_size_door_part_7_hinge", "y": 0}},
 		{"when": { "part": 7, "facing": "west", "hinge": "right", "open": false}, "apply": {"model": "bcp:block/double_size_door_part_7_hinge", "y": 270}},
-		{"when": { "part": 7, "facing": "west", "hinge": "right", "open": true}, "apply": {"model": "bcp:block/double_size_door_part_7", "y": 180}}
+		{"when": { "part": 7, "facing": "west", "hinge": "right", "open": true}, "apply": {"model": "bcp:block/double_size_door_part_7", "y": 180}},
+
+		{ "apply": { "model": "bcp:block/empty" } }
 	]
 }

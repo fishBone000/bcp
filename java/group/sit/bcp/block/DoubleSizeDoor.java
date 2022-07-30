@@ -20,14 +20,13 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -44,7 +43,6 @@ public class DoubleSizeDoor extends Block{
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 	protected static final VoxelShape SOUTH_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 6.0D);
 	protected static final VoxelShape NORTH_AABB = Block.box(0.0D, 0.0D, 10.0D, 16.0D, 16.0D, 16.0D);
 	protected static final VoxelShape WEST_AABB = Block.box(10.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
@@ -85,7 +83,7 @@ public class DoubleSizeDoor extends Block{
 
 	public DoubleSizeDoor(BlockBehaviour.Properties builder) {
 		super(builder);
-		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, Boolean.valueOf(false)).setValue(HINGE, DoorHingeSide.LEFT).setValue(POWERED, Boolean.valueOf(false)).setValue(PART, 3));
+		this.registerDefaultState(this.stateDefinition.any().setValue(PART, 0).setValue(FACING, Direction.NORTH).setValue(OPEN, Boolean.valueOf(false)).setValue(HINGE, DoorHingeSide.LEFT).setValue(POWERED, Boolean.valueOf(false)).setValue(PART, 3));
 	}
 
 	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
@@ -283,18 +281,16 @@ public class DoubleSizeDoor extends Block{
 		}
 	}
 
-	private void destroy(Level pLevel, BlockPos pPos, BlockState pState) {
-		if(!(pState.getBlock() instanceof DoubleSizeDoor))
-			throw new RuntimeException("BlockState " + pState.toString() + " at pos " + pPos.toString() + "is not instance of DoubleSizeDoor, this shouldn't happen!");
-
+	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+		super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
 		Direction direction = getDirection(pState);
 		final int part = pState.getValue(PART);
-		pPos = pPos.above(part % 4);
+		BlockPos iPos = pPos.above(part % 4);
 		if(part > 3)
-			pPos = pPos.relative(direction.getOpposite());
+			iPos = iPos.relative(direction.getOpposite());
 
 		for(int i = 0; i < 8; i++) {
-			BlockState iState = pLevel.getBlockState(pPos);
+			BlockState iState = pLevel.getBlockState(iPos);
 			if(iState.is(pState.getBlock())) {
 				if(	iState.getValue(PART) == i && 
 					iState.getValue(OPEN) == pState.getValue(OPEN) &&
@@ -302,16 +298,12 @@ public class DoubleSizeDoor extends Block{
 					iState.getValue(FACING) == pState.getValue(FACING) &&
 					iState.getValue(POWERED) == pState.getValue(POWERED)
 				) {
-					pLevel.setBlock(pPos, Blocks.AIR.defaultBlockState(), 3);
+					pLevel.setBlock(iPos, Blocks.AIR.defaultBlockState(), 3);
 				}
 			}
 
-			pPos = i == 3 ? pPos.relative(direction).above(3) : pPos.below();
+			iPos = i == 3 ? iPos.relative(direction).above(3) : iPos.below();
 		}
-	}
-
-	public void playerDestroy(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState, @Nullable BlockEntity pBlockEntity, ItemStack pTool) {
-		destroy(pLevel, pPos, pState);
 	}
 
 	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
@@ -359,5 +351,7 @@ public class DoubleSizeDoor extends Block{
 		}
 	}
 
-
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+	      pBuilder.add(FACING, OPEN, HINGE, POWERED, PART);
+	   }
 }

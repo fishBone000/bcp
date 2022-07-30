@@ -17,7 +17,7 @@ public class MainBlockPosBE extends BlockEntity {
 	private BlockPos mainBlockPos;
 
 	public MainBlockPosBE(BlockPos pPos, BlockState pState) {
-		super(bcp.mainBlockPosBEType, pPos, pState);
+		super(bcp.mainBlockPosBEType.get(), pPos, pState);
 	}
 
 	public BlockPos getMainBlockPos() {

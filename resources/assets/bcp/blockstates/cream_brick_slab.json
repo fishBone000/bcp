@@ -4,7 +4,7 @@
       "model": "bcp:block/cream_brick_slab"
     },
     "type=double": {
-      "model": "bcp:block/cream_brick_block"
+      "model": "bcp:block/cream_bricks"
     },
     "type=top": {
       "model": "bcp:block/cream_brick_slab_top"

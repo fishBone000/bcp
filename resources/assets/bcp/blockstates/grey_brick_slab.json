@@ -4,7 +4,7 @@
       "model": "bcp:block/grey_brick_slab"
     },
     "type=double": {
-      "model": "bcp:block/grey_brick_block"
+      "model": "bcp:block/grey_bricks"
     },
     "type=top": {
       "model": "bcp:block/grey_brick_slab_top"

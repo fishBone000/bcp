@@ -1,4 +1,4 @@
 {
 	"parent": "minecraft:block/cube",
-	"textures": {"faces": "bcp:block/bug", "north": "#all", "south": "#all", "up": "#all", "down": "#all", "west": "#all", "east": "#all"}
+	"textures": {"faces": "bcp:block/bug", "particle": "bcp:block/bug", "north": "#faces", "south": "#faces", "up": "#faces", "down": "#faces", "west": "#faces", "east": "#faces"}
 }
