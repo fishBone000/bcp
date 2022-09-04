@@ -138,13 +138,13 @@ public class bcp
     private static final RegistryObject<HoleyFenceExtension> HoleyFenceExtension = BLOCKS.register("holey_fence_extension", () -> new HoleyFenceExtension(METAL));
     private static final RegistryObject<BlockItem> HoleyFenceExtensionItem = ITEMS.register("holey_fence_extension_item", () -> new BlockItem(HoleyFenceExtension.get(), PROP));
 
-    private static final RegistryObject<MultiBlock> testMultiBlock = BLOCKS.register("test_multi_block", () -> new MultiBlock(2, 2, 3, METAL));
-    private static final RegistryObject<BlockItem> testMultiBlockItem = ITEMS.register("test_multi_block_item", () -> new BlockItem(testMultiBlock.get(), new Item.Properties()));
+    private static final RegistryObject<MultiBlock> testHugeBlock = BLOCKS.register("test_huge_block", () -> new HugeBlock(METAL));
+    private static final RegistryObject<BlockItem> testHugeBlockItem = ITEMS.register("test_huge_block_item", () -> new BlockItem(testHugeBlock.get(), new Item.Properties()));
 
     private static final RegistryObject<Wallpaper> whiteWallpaper= BLOCKS.register("white_wallpaper", () -> new Wallpaper(0.3F, ROCK.noCollission()));
     private static final RegistryObject<BlockItem> whiteWallpaperBlockItem = ITEMS.register("white_wallpaper_item", () -> new BlockItem(whiteWallpaper.get(), PROP));
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
-    public static final RegistryObject<BlockEntityType<MainBlockPosBE>> mainBlockPosBEType = BLOCK_ENTITIES.register("main_block_pos_be_type", () -> BlockEntityType.Builder.of(MainBlockPosBE::new, testMultiBlock.get()).build(null));
+    public static final RegistryObject<BlockEntityType<MainBlockPosBE>> mainBlockPosBEType = BLOCK_ENTITIES.register("main_block_pos_be_type", () -> BlockEntityType.Builder.of(MainBlockPosBE::new, testHugeBlock.get()).build(null));
     
     public bcp()
     {

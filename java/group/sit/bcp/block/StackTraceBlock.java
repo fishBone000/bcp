@@ -56,6 +56,12 @@ public class StackTraceBlock extends Block {
 	}
 
 	@Override
+	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+		Thread.dumpStack();
+		super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+	}
+
+	@Override
 	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
 		Thread.dumpStack();
 		return super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
