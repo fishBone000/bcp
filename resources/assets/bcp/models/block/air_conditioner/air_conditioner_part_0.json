@@ -6,13 +6,13 @@
 	},
 	"elements": [
 		{
-			"from": [1, 1, 0],
-			"to": [16, 15, 15],
+			"from": [ 1, 1, 1 ],
+			"to": [ 16, 15, 16 ],
 			"faces": {
-				"west": { "texture": "#white", "uv": [0, 1, 15, 15] },
-				"south": { "texture": "#white", "uv": [0, 0, 16, 16] },
-				"up": { "texture": "#white", "uv": [0, 0, 16, 16] },
-				"down": { "texture": "#white", "uv": [0, 0, 16, 16] }
+				"west": { "texture": "#white" },
+				"north": { "texture": "#white" },
+				"up": { "texture": "#white" },
+				"down": { "texture": "#white" }
 			}
 		}
 	]

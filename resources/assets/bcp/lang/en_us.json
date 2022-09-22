@@ -27,5 +27,9 @@
 
 	"block.bcp.wooden_double_size_door": "Wooden Double Size Door",
 
+	"block.bcp.cylinder_bin": "Cylinder Bin", 
+	"block.bcp.ac_external_unit": "AC External Unit", 
+	"block.bcp,air_conditioner": "Air Conditioner", 
+
 	"itemGroup.BCP": "BCP"
 }

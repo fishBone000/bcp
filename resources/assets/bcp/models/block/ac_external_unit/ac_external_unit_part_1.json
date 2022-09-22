@@ -7,11 +7,13 @@
 	"elements": [
 		{
 			"from": [0, 0, 1],
-			"to": [16, 16, 15],
+			"to": [12, 16, 15],
 			"faces": {
-				"north": { "texture": "#white", "uv": [0, 1, 15, 15] },
-				"south": { "texture": "#white", "uv": [0, 1, 15, 15] },
-				"down": { "texture": "#white", "uv": [0, 1, 15, 15] }
+				"north": { "texture": "#white" },
+				"south": { "texture": "#white" },
+				"east": { "texture": "#white" },
+				"up": { "texture": "#white" }, 
+				"down": { "texture": "#white" }
 			}
 		}
 	]
