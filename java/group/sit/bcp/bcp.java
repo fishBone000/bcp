@@ -37,6 +37,7 @@ import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
 
 import group.sit.bcp.block.*;
+import group.sit.bcp.block.multiblocks.*;
 import group.sit.bcp.blockentities.MainBlockPosBE;
 
 import java.util.stream.Collectors;
@@ -140,6 +141,15 @@ public class bcp
 
     private static final RegistryObject<MultiBlock> testHugeBlock = BLOCKS.register("test_huge_block", () -> new HugeBlock(METAL));
     private static final RegistryObject<BlockItem> testHugeBlockItem = ITEMS.register("test_huge_block_item", () -> new BlockItem(testHugeBlock.get(), new Item.Properties()));
+
+    private static final RegistryObject<AirConditioner> airConditioner = BLOCKS.register("air_conditioner", () -> new AirConditioner(METAL));
+    private static final RegistryObject<BlockItem> airConditionerItem = ITEMS.register("air_conditioner_item", () -> new BlockItem(airConditioner.get(), PROP));
+
+    private static final RegistryObject<ACExternalUnit> acExternalUnit = BLOCKS.register("ac_external_unit", () -> new ACExternalUnit(METAL));
+    private static final RegistryObject<BlockItem> acExternalUnitItem = ITEMS.register("ac_external_unit_item", () -> new BlockItem(acExternalUnit.get(), PROP));
+
+    private static final RegistryObject<CylinderBin> cylinderBin = BLOCKS.register("cylinder_bin", () -> new CylinderBin(METAL));
+    private static final RegistryObject<BlockItem> cylinderBinItem = ITEMS.register("cylinder_bin_item", () -> new BlockItem(cylinderBin.get(), PROP));
 
     private static final RegistryObject<Wallpaper> whiteWallpaper= BLOCKS.register("white_wallpaper", () -> new Wallpaper(0.3F, ROCK.noCollission()));
     private static final RegistryObject<BlockItem> whiteWallpaperBlockItem = ITEMS.register("white_wallpaper_item", () -> new BlockItem(whiteWallpaper.get(), PROP));

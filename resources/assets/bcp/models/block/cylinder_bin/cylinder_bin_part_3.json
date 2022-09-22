@@ -1,0 +1,39 @@
+{
+    "__comment": "Model hand written by FishBone000",
+    "textures": {
+	    "body": "bcp:block/white", 
+	    "bag": "bcp:block/black"
+    }, 
+    "elements": [
+	    {
+		    "name": "East Face", 
+		    "from": [ 7, 0, 8 ], 
+		    "to": [ 8, 16, 16 ], 
+		    "faces": {
+			    "north": { "texture": "#body" }, 
+			    "east": { "texture": "#body" }, 
+			    "west": { "texture": "#bag" }, 
+			    "down": { "texture": "#body" }
+		    }
+	    }, 
+	    {
+		    "name": "North Face", 
+		    "from": [ 0, 0, 8 ], 
+		    "to": [ 8, 16, 9 ], 
+		    "faces": {
+			    "north": { "texture": "#body" }, 
+			    "south": { "texture": "#bag" }, 
+			    "down": { "texture": "#body" }
+		    }
+	    }, 
+	    {
+		    "name": "Bottom", 
+		    "from": [ 0, 0, 9 ], 
+		    "to": [ 7, 1, 16 ], 
+		    "faces": {
+			    "up": { "texture": "#bag" }, 
+			    "down": { "texture": "#body" }
+		    }
+	    }
+    ]
+}

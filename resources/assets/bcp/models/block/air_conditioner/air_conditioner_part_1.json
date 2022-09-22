@@ -1,0 +1,19 @@
+{
+	"__comment": "Handwriiten model by F.B.", 
+	"textures": {
+		"white": "bcp:block/white",
+		"particle": "#white"
+	},
+	"elements": [
+		{
+			"from": [0, 1, 0],
+			"to": [16, 15, 15],
+			"faces": {
+				"west": { "texture": "#white", "uv": [0, 1, 15, 15] },
+				"south": { "texture": "#white", "uv": [0, 0, 16, 16] },
+				"up": { "texture": "#white", "uv": [0, 0, 16, 16] },
+				"down": { "texture": "#white", "uv": [0, 0, 16, 16] }
+			}
+		}
+	]
+}

@@ -1,0 +1,32 @@
+{
+    "__comment": "Model hand written by FishBone000",
+    "textures": {
+	    "body": "bcp:block/white", 
+	    "bag": "bcp:block/black"
+    }, 
+    "elements": [
+	    {
+		    "name": "East Face", 
+		    "from": [ 7, 0, 0 ], 
+		    "to": [ 9, 6, 9 ], 
+		    "faces": {
+			    "south": { "texture": "#bag" }, 
+			    "east": { "texture": "#bag" }, 
+			    "up": { "texture": "#bag" }, 
+			    "down": { "texture": "#bag" }, 
+			    "west": { "texture": "#bag" }
+		    }
+	    }, 
+	    {
+		    "name": "South Face", 
+		    "from": [ 0, 0, 7 ], 
+		    "to": [ 7, 6, 9 ], 
+		    "faces": {
+			    "north": { "texture": "#bag" }, 
+			    "up": { "texture": "#bag" }, 
+			    "down": { "texture": "#bag" }, 
+			    "south": { "texture": "#bag" }
+		    }
+	    }
+    ]
+}

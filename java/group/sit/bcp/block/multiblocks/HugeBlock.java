@@ -1,4 +1,4 @@
-package group.sit.bcp.block;
+package group.sit.bcp.block.multiblocks;
 
 public class HugeBlock extends MultiBlock{
 	public HugeBlock(Properties properties) {

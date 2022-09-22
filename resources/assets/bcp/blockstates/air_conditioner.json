@@ -1,0 +1,19 @@
+{
+	"multipart": [
+		{"when": {"index": 0, "facing": "north"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_0", "y": 0}}, 
+		{"when": {"index": 0, "facing": "east"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_0", "y": 90}}, 
+		{"when": {"index": 0, "facing": "south"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_0", "y": 180}}, 
+		{"when": {"index": 0, "facing": "west"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_0", "y": 270}}, 
+
+		{"when": {"index": 1, "facing": "north"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_1", "y": 0}}, 
+		{"when": {"index": 1, "facing": "east"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_1", "y": 90}}, 
+		{"when": {"index": 1, "facing": "south"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_1", "y": 180}}, 
+		{"when": {"index": 1, "facing": "west"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_1", "y": 270}}, 
+
+		{"when": {"index": 2, "facing": "north"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_2", "y": 0}}, 
+		{"when": {"index": 2, "facing": "east"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_2", "y": 90}}, 
+		{"when": {"index": 2, "facing": "south"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_2", "y": 180}}, 
+		{"when": {"index": 2, "facing": "west"}, "apply": {"model": "bcp:block/air_conditioner/air_conditioner_part_2", "y": 270}}
+
+	]
+}

@@ -1,4 +1,4 @@
-package group.sit.bcp.block;
+package group.sit.bcp.block.multiblocks;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -68,7 +68,7 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	protected abstract int depthStart();
 	protected abstract int depthEnd();
 	protected IntegerProperty getIndexProperty() {
-		return IntegerProperty.create("index", 0, (widthEnd() - widthStart()+1) * (heightEnd() - heightStart()+1) * (depthEnd() - depthStart()+1));
+		return IntegerProperty.create("index", 0, (widthEnd() - widthStart()+1) * (heightEnd() - heightStart()+1) * (depthEnd() - depthStart()+1) - 1);
 	}
 
 	public MultiBlock(BlockBehaviour.Properties properties) {
@@ -76,34 +76,33 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	}
 
 	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-		BlockEntity te = pLevel.getBlockEntity(pPos);
-		if(!(pState.getBlock() instanceof MultiBlock)) {
-			LOGGER.warn("Expected block at pos " + pPos.toString() + " type of MultiBlock sub block, but it is " + pState.toString() + ", this shoudln't happen!");
-			super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
-			return;
-		}
+		BlockEntity be = pLevel.getBlockEntity(pPos);
 		Block block = pState.getBlock();
-		if(te != null) {
-			if(te instanceof MainBlockPosBE) {
-				BlockPos mainBlockPos = ((MainBlockPosBE)te).getMainBlockPos();
-				if(block instanceof MultiBlock) {
-					if(mainBlockPos != null) {
-						((MultiBlock)block).breakOtherBlocks(pLevel, mainBlockPos, pPos, pState.getValue(FACING));
-						return;
-					}
-				}else 
-					LOGGER.warn("Expected block at pos " + mainBlockPos.toString() + " type of MultiBlock main block, but it is " + block.toString() + ", this shouldn't happen!");
-			}else 
-				LOGGER.warn("Expected BlockEntity at pos " + pPos.toString() + " type of MainBlockPosBE, but it is " + te.toString() + ", this shouldn't happen!");
-		}else if(pState.getValue(PART) == MultiBlockPart.MAIN)
+		if(pState.getValue(PART) == MultiBlockPart.MAIN) {
 			this.breakOtherBlocks(pLevel, pPos, pPos, pState.getValue(FACING));
+			pLevel.removeBlockEntity(pPos);
+			super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+		}else if(be != null) {
+			if(be instanceof MainBlockPosBE) {
+				BlockPos mainBlockPos = ((MainBlockPosBE)be).getMainBlockPos();
+				if(mainBlockPos != null) {
+					((MultiBlock)block).breakOtherBlocks(pLevel, mainBlockPos, pPos, pState.getValue(FACING));
+					pLevel.removeBlockEntity(pPos);
+					super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+					return;
+				}else
+					LOGGER.warn("Main block pos in MainBlockPosBE is null! BE: " + be.toString());
+			}else 
+				LOGGER.warn("Expected BlockEntity at pos " + pPos.toString() + " type of MainBlockPosBE, but it is " + be.toString() + ", this shouldn't happen!");
+		}
 	}
 
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+		int index = getIndex(0, 0, 0);
 		return this.defaultBlockState()
-				.setValue(PART, MultiBlockPart.MAIN)
+				.setValue(PART, index>0 ? MultiBlockPart.SUB : MultiBlockPart.MAIN)
 				.setValue(FACING, pContext.getHorizontalDirection())
-				.setValue(getIndexProperty(), 0);
+				.setValue(getIndexProperty(), index);
 	}
 
 	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
@@ -130,23 +129,22 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 		return iWidth + width*iDepth + width*depth*iHeight;
 	}
 
-	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-		Rotation rotation;
+	protected Rotation facingToRotation(BlockState pState) {
 		switch(pState.getValue(FACING)) {
 			default:
 			case NORTH:
-				rotation = Rotation.NONE;
-				break;
+				return Rotation.NONE;
 			case EAST:
-				rotation = Rotation.CLOCKWISE_90;
-				break;
+				return Rotation.CLOCKWISE_90;
 			case SOUTH:
-				rotation = Rotation.CLOCKWISE_180;
-				break;
+				return Rotation.CLOCKWISE_180;
 			case WEST:
-				rotation = Rotation.COUNTERCLOCKWISE_90;
-				break;
+				return Rotation.COUNTERCLOCKWISE_90;
 		}
+	}
+
+	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+		Rotation rotation = facingToRotation(pState);
 
 		int heightStart = heightStart(), heightEnd = heightEnd();
 		int depthStart = depthStart(), depthEnd = depthEnd();
@@ -157,7 +155,7 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 					BlockPos offset = new BlockPos(iWidth, iHeight, -iDepth).rotate(rotation);
 					BlockPos iPos = pPos.offset(offset);
 					int index = getIndex(iWidth, iHeight, iDepth);
-					if(index != 0)
+					if(iPos != pPos)
 						pLevel.setBlock(iPos, pState.setValue(PART, MultiBlockPart.SUB).setValue(getIndexProperty(), index), 3);
 
 					BlockEntity te = pLevel.getBlockEntity(iPos);
@@ -165,8 +163,11 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 						MainBlockPosBE mbpte = (MainBlockPosBE)te;
 						mbpte.setMainBlockPos(pPos);
 					}else {
-						LOGGER.warn("BlockEntity at position " + iPos + " is expected to be instance of MainBlockPosBE");
-						LOGGER.warn("BlockEntity is: " + te.toString());
+						LOGGER.warn("BlockEntity at position " + iPos + " is expected to be instance of MainBlockPosBE when trying to set main block pos. ");
+						if(te == null)
+							LOGGER.warn("BlockEntity is null!");
+						else
+							LOGGER.warn("BlockEntity is: " + te.toString());
 					}
 				}
 	}
@@ -214,6 +215,7 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	*/
 
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+		LOGGER.debug("newBlockEntity is called, pPos: " + pPos.toString() + ", pState: " + pState.toString());
 		return new MainBlockPosBE(pPos, pState);
 	}
 

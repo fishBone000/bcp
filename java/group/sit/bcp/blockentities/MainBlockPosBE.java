@@ -5,6 +5,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
+
 // import org.apache.logging.log4j.LogManager;
 // import org.apache.logging.log4j.Logger;
 
@@ -12,7 +16,7 @@ import group.sit.bcp.bcp;
 
 public class MainBlockPosBE extends BlockEntity {
 
-	// private static Logger LOGGER = LogManager.getLogger();
+	private static Logger LOGGER = LogUtils.getLogger();
 
 	private BlockPos mainBlockPos;
 
@@ -25,10 +29,12 @@ public class MainBlockPosBE extends BlockEntity {
 	}
 
 	public void setMainBlockPos(BlockPos pos) {
+		LOGGER.debug("setMainBlockPos is called at: " + worldPosition + ", MBP: " + pos.toString());
 		mainBlockPos = pos;
 	}
 
 	protected void saveAdditional(CompoundTag nbt) {
+		LOGGER.debug("saveAdditional is called at pos: " + worldPosition);
 		super.saveAdditional(nbt);
 		if(mainBlockPos != null) {
 			nbt.putInt("mBPx", mainBlockPos.getX());
