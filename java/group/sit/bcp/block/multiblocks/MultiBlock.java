@@ -59,8 +59,6 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public static final EnumProperty<MultiBlockPart> PART = EnumProperty.create("part", MultiBlockPart.class);
-
 	protected abstract int widthStart();
 	protected abstract int widthEnd();
 	protected abstract int heightStart();
@@ -78,11 +76,7 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
 		BlockEntity be = pLevel.getBlockEntity(pPos);
 		Block block = pState.getBlock();
-		if(pState.getValue(PART) == MultiBlockPart.MAIN) {
-			this.breakOtherBlocks(pLevel, pPos, pPos, pState.getValue(FACING));
-			pLevel.removeBlockEntity(pPos);
-			super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
-		}else if(be != null) {
+		if(be != null) {
 			if(be instanceof MainBlockPosBE) {
 				BlockPos mainBlockPos = ((MainBlockPosBE)be).getMainBlockPos();
 				if(mainBlockPos != null) {
@@ -100,7 +94,6 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
 		int index = getIndex(0, 0, 0);
 		return this.defaultBlockState()
-				.setValue(PART, index>0 ? MultiBlockPart.SUB : MultiBlockPart.MAIN)
 				.setValue(FACING, pContext.getHorizontalDirection())
 				.setValue(getIndexProperty(), index);
 	}
@@ -156,7 +149,7 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 					BlockPos iPos = pPos.offset(offset);
 					int index = getIndex(iWidth, iHeight, iDepth);
 					if(iPos != pPos)
-						pLevel.setBlock(iPos, pState.setValue(PART, MultiBlockPart.SUB).setValue(getIndexProperty(), index), 3);
+						pLevel.setBlock(iPos, pState.setValue(getIndexProperty(), index), 3);
 
 					BlockEntity te = pLevel.getBlockEntity(iPos);
 					if(te instanceof MainBlockPosBE) {
@@ -172,20 +165,6 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 				}
 	}
 
-	/*public void playerDestroy(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState, @Nullable BlockEntity pBlockEntity, ItemStack pTool) {
-		HorizontalRange range = new HorizontalRange(pState.getValue(FACING));
-		int heightStart = heightStart(), heightEnd = heightEnd();
-		for(int iSouth = range.southStart; iSouth <= range.southEnd; iSouth++) {
-			for(int iEast = range.eastStart; iEast <= range.eastEnd; iEast++) {
-				for(int iHeight = heightStart; iHeight <= heightEnd; iHeight++) {
-					if(pLevel.getBlockState(pPos.south(iSouth).east(iEast).above(iHeight)).is(pLevel.getBlockState(pPos).getBlock())) {
-						pLevel.setBlock(pPos.south(iSouth).east(iEast).above(iHeight), Blocks.AIR.defaultBlockState(), 3);
-					}
-				}
-			}
-		}
-	}
-	*/
 	private void breakOtherBlocks(Level pLevel, BlockPos mainBlockPos, BlockPos thisPos, Direction facing) { // Break all blocks EXCEPT main block
 		HorizontalRange range = new HorizontalRange(facing);
 		int heightStart = heightStart(), heightEnd = heightEnd();
@@ -203,16 +182,6 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	}
 
 	// TODO onExplosionDestroy
-
-	/*
-	public boolean hasBlockEntity(BlockState state) {
-		return state.getValue(PART) != MultiBlockPart.MAIN;
-	}
-
-	public BlockEntity createBlockEntity(BlockState state, BlockGetter world) {
-		return new MainBlockPosBE();
-	}
-	*/
 
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 		LOGGER.debug("newBlockEntity is called, pPos: " + pPos.toString() + ", pState: " + pState.toString());
@@ -255,6 +224,6 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	}
 
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(FACING, PART, getIndexProperty());
+		pBuilder.add(FACING, getIndexProperty());
 	}
 }
