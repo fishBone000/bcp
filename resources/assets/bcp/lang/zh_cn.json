@@ -29,7 +29,7 @@
 
 	"block.bcp.cylinder_bin": "垃圾桶", 
 	"block.bcp.ac_external_unit": "空调外机", 
-	"block.bcp,air_conditioner": "空调", 
+	"block.bcp.air_conditioner": "空调", 
 
 	"itemGroup.BCP": "BCP"
 }

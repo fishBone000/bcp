@@ -184,7 +184,6 @@ public abstract class MultiBlock extends HorizontalDirectionalBlock implements E
 	// TODO onExplosionDestroy
 
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-		LOGGER.debug("newBlockEntity is called, pPos: " + pPos.toString() + ", pState: " + pState.toString());
 		return new MainBlockPosBE(pPos, pState);
 	}
 

@@ -1,0 +1,6 @@
+{
+	"parent": "item/generated", 
+	"textures": {
+		"layer0": "bcp:item/ac_external_unit_inventory"
+	}
+}

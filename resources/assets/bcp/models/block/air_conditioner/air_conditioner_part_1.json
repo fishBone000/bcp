@@ -1,18 +1,23 @@
 {
 	"__comment": "Handwriiten model by F.B.", 
 	"textures": {
-		"white": "bcp:block/white",
-		"particle": "#white"
+		"north": "bcp:block/air_conditioner/front_0", 
+		"south": "bcp:block/air_conditioner/back_1", 
+		"east": "bcp:block/air_conditioner/right", 
+		"up": "bcp:block/air_conditioner/up_1", 
+		"down": "bcp:block/air_conditioner/down_1", 
+		"particle": "#north"
 	},
 	"elements": [
 		{
-			"from": [ 0, 1, 1 ],
-			"to": [ 15, 15, 16 ],
+			"from": [ 0, 3, 10 ],
+			"to": [ 15, 13, 16 ],
 			"faces": {
-				"east": { "texture": "#white" },
-				"north": { "texture": "#white" },
-				"up": { "texture": "#white" },
-				"down": { "texture": "#white" }
+				"east": { "texture": "#east" },
+				"north": { "texture": "#north" },
+				"south": { "texture": "#south", "cullface": "south" }, 
+				"up": { "texture": "#up" },
+				"down": { "texture": "#down" }
 			}
 		}
 	]

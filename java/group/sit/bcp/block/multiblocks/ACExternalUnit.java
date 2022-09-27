@@ -14,8 +14,8 @@ import group.sit.bcp.utils.HorizontalDirectionToIndex;
 public class ACExternalUnit extends MultiBlock {
 
 	protected static final double[][] AABB_PARAMETERS = {
-				{4D, 0D, 1D, 16D, 16D, 15D},
-				{0D, 0D, 1D, 12D, 16D, 15D}
+				{4D, 0D, 5D, 16D, 15D, 15D},
+				{0D, 0D, 5D, 12D, 15D, 15D}
 		};
 	protected static final VoxelShape SHAPES[][] = HorizontalAABBGenerator.generate(AABB_PARAMETERS); 
 

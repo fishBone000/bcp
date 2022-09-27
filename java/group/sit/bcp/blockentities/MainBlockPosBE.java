@@ -29,12 +29,10 @@ public class MainBlockPosBE extends BlockEntity {
 	}
 
 	public void setMainBlockPos(BlockPos pos) {
-		LOGGER.debug("setMainBlockPos is called at: " + worldPosition + ", MBP: " + pos.toString());
 		mainBlockPos = pos;
 	}
 
 	protected void saveAdditional(CompoundTag nbt) {
-		LOGGER.debug("saveAdditional is called at pos: " + worldPosition);
 		super.saveAdditional(nbt);
 		if(mainBlockPos != null) {
 			nbt.putInt("mBPx", mainBlockPos.getX());

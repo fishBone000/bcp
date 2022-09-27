@@ -1,19 +1,23 @@
 {
 	"__comment": "Handwritten model by F.B.", 
 	"textures": {
-		"white": "bcp:block/debug",
-		"particle": "#white"
+		"north": "bcp:block/ac_external_unit/front_0", 
+		"south": "bcp:block/ac_external_unit/back_1", 
+		"east": "bcp:block/ac_external_unit/left", 
+		"up": "bcp:block/ac_external_unit/up_1", 
+		"down": "bcp:block/ac_external_unit/down_1", 
+		"particle": "#north"
 	},
 	"elements": [
 		{
-			"from": [0, 0, 1],
-			"to": [12, 16, 15],
+			"from": [0, 0, 5],
+			"to": [12, 15, 15],
 			"faces": {
-				"north": { "texture": "#white" },
-				"south": { "texture": "#white" },
-				"east": { "texture": "#white" },
-				"up": { "texture": "#white" }, 
-				"down": { "texture": "#white" }
+				"north": { "texture": "#north" },
+				"south": { "texture": "#south" },
+				"east": { "texture": "#east" },
+				"up": { "texture": "#up" }, 
+				"down": { "texture": "#down" }
 			}
 		}
 	]
