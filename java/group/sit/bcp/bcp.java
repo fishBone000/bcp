@@ -139,9 +139,6 @@ public class bcp
     private static final RegistryObject<HoleyFenceExtension> HoleyFenceExtension = BLOCKS.register("holey_fence_extension", () -> new HoleyFenceExtension(METAL));
     private static final RegistryObject<BlockItem> HoleyFenceExtensionItem = ITEMS.register("holey_fence_extension_item", () -> new BlockItem(HoleyFenceExtension.get(), PROP));
 
-    private static final RegistryObject<MultiBlock> testHugeBlock = BLOCKS.register("test_huge_block", () -> new HugeBlock(METAL));
-    private static final RegistryObject<BlockItem> testHugeBlockItem = ITEMS.register("test_huge_block_item", () -> new BlockItem(testHugeBlock.get(), new Item.Properties()));
-
     private static final RegistryObject<AirConditioner> airConditioner = BLOCKS.register("air_conditioner", () -> new AirConditioner(METAL));
     private static final RegistryObject<BlockItem> airConditionerItem = ITEMS.register("air_conditioner_item", () -> new BlockItem(airConditioner.get(), PROP));
 
@@ -151,10 +148,22 @@ public class bcp
     private static final RegistryObject<CylinderBin> cylinderBin = BLOCKS.register("cylinder_bin", () -> new CylinderBin(METAL));
     private static final RegistryObject<BlockItem> cylinderBinItem = ITEMS.register("cylinder_bin_item", () -> new BlockItem(cylinderBin.get(), PROP));
 
+    private static final RegistryObject<TrashBacket> trashBasket = BLOCKS.register("trash_basket", () -> new TrashBacket(METAL));
+    private static final RegistryObject<BlockItem> trashBasketItem = ITEMS.register("trash_basket_item", () -> new BlockItem(trashBasket.get(), PROP));
+
     private static final RegistryObject<Wallpaper> whiteWallpaper= BLOCKS.register("white_wallpaper", () -> new Wallpaper(0.3F, ROCK.noCollission()));
     private static final RegistryObject<BlockItem> whiteWallpaperBlockItem = ITEMS.register("white_wallpaper_item", () -> new BlockItem(whiteWallpaper.get(), PROP));
     // ==================================   BLOCK / ITEM INSTANCE END   =================================
-    public static final RegistryObject<BlockEntityType<MainBlockPosBE>> mainBlockPosBEType = BLOCK_ENTITIES.register("main_block_pos_be_type", () -> BlockEntityType.Builder.of(MainBlockPosBE::new, testHugeBlock.get()).build(null));
+    public static final RegistryObject<BlockEntityType<MainBlockPosBE>> mainBlockPosBEType = 
+    		BLOCK_ENTITIES.register(
+    				"main_block_pos_be_type", 
+    				() -> BlockEntityType.Builder.of(
+    						MainBlockPosBE::new, 
+    						airConditioner.get(), 
+    						acExternalUnit.get(), 
+    						cylinderBin.get()
+					).build(null)
+			);
     
     public bcp()
     {

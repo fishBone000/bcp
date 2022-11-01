@@ -31,5 +31,7 @@
 	"block.bcp.ac_external_unit": "AC External Unit", 
 	"block.bcp.air_conditioner": "Air Conditioner", 
 
+	"block.bcp.trash_basket": "Trash Basket", 
+
 	"itemGroup.BCP": "BCP"
 }

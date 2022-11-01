@@ -1,8 +1,9 @@
 {
     "__comment": "Model hand written by FishBone000",
     "textures": {
-	    "body": "bcp:block/white", 
-	    "bag": "bcp:block/black"
+	    "body": "bcp:block/cylinder_bin/body", 
+	    "particle": "#body", 
+	    "bag": "bcp:block/cylinder_bin/bag"
     }, 
     "elements": [
 	    {
