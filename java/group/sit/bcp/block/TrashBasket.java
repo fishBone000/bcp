@@ -10,7 +10,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class TrashBacket extends Block {
+public class TrashBasket extends Block {
 
 	private static final VoxelShape NORTH_SHAPE = box(5, 0, 4, 11, 10, 5);
 	private static final VoxelShape SOUTH_SHAPE = box(5, 0, 11, 11, 10, 12);
@@ -19,7 +19,7 @@ public class TrashBacket extends Block {
 	private static final VoxelShape BOTTOM_SHAPE = box(5, 0, 5, 11, 10, 11);
 	private static final VoxelShape SHAPE = Shapes.or(NORTH_SHAPE, SOUTH_SHAPE, WEST_SHAPE, EAST_SHAPE, BOTTOM_SHAPE);
 
-	public TrashBacket(BlockBehaviour.Properties properties) {
+	public TrashBasket(BlockBehaviour.Properties properties) {
 		super(properties);
 	}
 

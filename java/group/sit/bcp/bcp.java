@@ -133,11 +133,11 @@ public class bcp
     private static final RegistryObject<Block> creamWall = BLOCKS.register("cream_wall", () -> new Block(ROCK));
     private static final RegistryObject<BlockItem> creamWallItem = ITEMS.register("cream_wall_item", () -> new BlockItem(creamWall.get(), PROP));
     
-    private static final RegistryObject<HoleyFenceNode> HoleyFenceNode = BLOCKS.register("holey_fence_node", () -> new HoleyFenceNode(1.0F, 1.0F, 16.0F, 25.0F, METAL));
-    private static final RegistryObject<BlockItem> HoleyFenceNodeItem = ITEMS.register("holey_fence_node_item", () -> new BlockItem(HoleyFenceNode.get(), PROP));
+    private static final RegistryObject<HoleyFenceNode> holeyFenceNode = BLOCKS.register("holey_fence_node", () -> new HoleyFenceNode(1.0F, 1.0F, 16.0F, 25.0F, METAL));
+    private static final RegistryObject<BlockItem> holeyFenceNodeItem = ITEMS.register("holey_fence_node_item", () -> new BlockItem(holeyFenceNode.get(), PROP));
     
-    private static final RegistryObject<HoleyFenceExtension> HoleyFenceExtension = BLOCKS.register("holey_fence_extension", () -> new HoleyFenceExtension(METAL));
-    private static final RegistryObject<BlockItem> HoleyFenceExtensionItem = ITEMS.register("holey_fence_extension_item", () -> new BlockItem(HoleyFenceExtension.get(), PROP));
+    private static final RegistryObject<HoleyFenceExtension> holeyFenceExtension = BLOCKS.register("holey_fence_extension", () -> new HoleyFenceExtension(METAL));
+    private static final RegistryObject<BlockItem> holeyFenceExtensionItem = ITEMS.register("holey_fence_extension_item", () -> new BlockItem(holeyFenceExtension.get(), PROP));
 
     private static final RegistryObject<AirConditioner> airConditioner = BLOCKS.register("air_conditioner", () -> new AirConditioner(METAL));
     private static final RegistryObject<BlockItem> airConditionerItem = ITEMS.register("air_conditioner_item", () -> new BlockItem(airConditioner.get(), PROP));
@@ -148,7 +148,7 @@ public class bcp
     private static final RegistryObject<CylinderBin> cylinderBin = BLOCKS.register("cylinder_bin", () -> new CylinderBin(METAL));
     private static final RegistryObject<BlockItem> cylinderBinItem = ITEMS.register("cylinder_bin_item", () -> new BlockItem(cylinderBin.get(), PROP));
 
-    private static final RegistryObject<TrashBacket> trashBasket = BLOCKS.register("trash_basket", () -> new TrashBacket(METAL));
+    private static final RegistryObject<TrashBasket> trashBasket = BLOCKS.register("trash_basket", () -> new TrashBasket(METAL));
     private static final RegistryObject<BlockItem> trashBasketItem = ITEMS.register("trash_basket_item", () -> new BlockItem(trashBasket.get(), PROP));
 
     private static final RegistryObject<Wallpaper> whiteWallpaper= BLOCKS.register("white_wallpaper", () -> new Wallpaper(0.3F, ROCK.noCollission()));
@@ -185,8 +185,9 @@ public class bcp
 
     private void doClientStuff(final FMLClientSetupEvent event) {
     	LOGGER.info("Hello from doClientStuff");
-    	ItemBlockRenderTypes.setRenderLayer(HoleyFenceNode.get(), RenderType.cutout());
-    	ItemBlockRenderTypes.setRenderLayer(HoleyFenceExtension.get(), RenderType.cutout());
+    	ItemBlockRenderTypes.setRenderLayer(holeyFenceNode.get(), RenderType.cutout());
+    	ItemBlockRenderTypes.setRenderLayer(holeyFenceExtension.get(), RenderType.cutout());
+    	ItemBlockRenderTypes.setRenderLayer(trashBasket.get(), RenderType.cutout());
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -199,8 +200,8 @@ public class bcp
     /*private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().getValue().gameSettings);
-        RenderTypeLookup.setRenderLayer(HoleyFenceNode, RenderType.getCutoutMipped());
-        RenderTypeLookup.setRenderLayer(HoleyFenceExtension, RenderType.getCutoutMipped());
+        RenderTypeLookup.setRenderLayer(holeyFenceNode, RenderType.getCutoutMipped());
+        RenderTypeLookup.setRenderLayer(holeyFenceExtension, RenderType.getCutoutMipped());
         //RenderTypeLookup.setRenderLayer(whiteWallpaper, RenderType.getCutoutMipped());
     }
     */
