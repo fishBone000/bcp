@@ -2,6 +2,7 @@
 	"parent": "minecraft:block/block",
 	"textures": {
 		"body": "bcp:block/trash_basket/body",
+		"body_inverted": "bcp:block/trash_basket/body_inverted",
 		"bottom": "bcp:block/trash_basket/bottom", 
 		"bag": "bcp:block/trash_basket/bag", 
 		"top": "bcp:block/trash_basket/top",
@@ -14,7 +15,7 @@
 			"to": [ 13, 12, 3 ], 
 			"faces": {
 				"north": { "texture": "#body" },
-				"south": { "texture": "#body" }
+				"south": { "texture": "#body_inverted" }
 			}
 		},
 		{
@@ -23,7 +24,7 @@
 			"to": [ 13, 12, 13 ], 
 			"faces": {
 				"east": { "texture": "#body" }, 
-				"west": { "texture": "#body" }
+				"west": { "texture": "#body_inverted" }
 			}
 		},
 		{
@@ -31,7 +32,7 @@
 			"from": [ 3, 0, 13 ],
 			"to": [ 13, 12, 13 ], 
 			"faces": {
-				"north": { "texture": "#body" }, 
+				"north": { "texture": "#body_inverted" }, 
 				"south": { "texture": "#body" }
 			}
 		},
@@ -40,12 +41,12 @@
 			"from": [ 3, 0, 3 ],
 			"to": [ 3, 12, 13 ], 
 			"faces": {
-				"east": { "texture": "#body" }, 
+				"east": { "texture": "#body_inverted" }, 
 				"west": { "texture": "#body" }
 			}
 		},
 		{
-			"name": "Bottom Inner",
+			"name": "Bottom",
 			"from": [ 3, 0, 3 ], 
 			"to": [ 13, 0.1, 13 ], 
 			"faces": {

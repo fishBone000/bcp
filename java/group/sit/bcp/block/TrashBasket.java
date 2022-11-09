@@ -12,11 +12,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class TrashBasket extends Block {
 
-	private static final VoxelShape NORTH_SHAPE = box(5, 0, 4, 11, 10, 5);
-	private static final VoxelShape SOUTH_SHAPE = box(5, 0, 11, 11, 10, 12);
-	private static final VoxelShape WEST_SHAPE = box(4, 0, 4, 5, 10, 12);
-	private static final VoxelShape EAST_SHAPE = box(11, 0, 4, 12, 10, 12);
-	private static final VoxelShape BOTTOM_SHAPE = box(5, 0, 5, 11, 10, 11);
+	private static final VoxelShape NORTH_SHAPE = box(4, 0, 3, 12, 12, 4);
+	private static final VoxelShape SOUTH_SHAPE = box(4, 0, 12, 12, 12, 13);
+	private static final VoxelShape WEST_SHAPE = box(3, 0, 3, 4, 12, 13);
+	private static final VoxelShape EAST_SHAPE = box(12, 0, 3, 13, 12, 13);
+	private static final VoxelShape BOTTOM_SHAPE = box(4, 0, 4, 12, 12, 12);
 	private static final VoxelShape SHAPE = Shapes.or(NORTH_SHAPE, SOUTH_SHAPE, WEST_SHAPE, EAST_SHAPE, BOTTOM_SHAPE);
 
 	public TrashBasket(BlockBehaviour.Properties properties) {
